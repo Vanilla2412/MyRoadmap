@@ -99,7 +99,7 @@ The primary feature of this application is to manage learning tasks with the fol
 - **Infrastructure**: AWS Amplify Gen 2 (TypeScript-based IaC)
 - **Authentication**: AWS Cognito
 - **Database**: Amazon DynamoDB
-- **API**: AWS AppSync (GraphQL) or API Gateway (REST)
+- **API**: AWS AppSync (GraphQL)
 
 ### CI/CD
 - **Version Control**: GitHub
