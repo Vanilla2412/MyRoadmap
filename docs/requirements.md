@@ -6,6 +6,7 @@
 **Purpose:** A learning task management application designed to help users track and organize their learning tasks systematically.
 
 **Target Users:**
+
 - Individuals managing self-paced learning goals
 - Users who need structured task tracking for skill development
 
@@ -19,13 +20,13 @@ The primary feature of this application is to manage learning tasks with the fol
 
 #### Task Properties
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| **Title** | String | Yes | Name of the learning task (e.g., "Learn Next.js App Router") |
-| **Status** | Enum | Yes | Current state of the task: `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED` |
-| **Priority** | Enum | Yes | Task priority level: `HIGH`, `MEDIUM`, `LOW` |
-| **Due Date** | Date | Yes | Target completion date |
-| **Category** | String | Yes | Learning domain (e.g., "Frontend", "Backend", "Infrastructure", "Algorithm") |
+| Property     | Type   | Required | Description                                                                  |
+| ------------ | ------ | -------- | ---------------------------------------------------------------------------- |
+| **Title**    | String | Yes      | Name of the learning task (e.g., "Learn Next.js App Router")                 |
+| **Status**   | Enum   | Yes      | Current state of the task: `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`         |
+| **Priority** | Enum   | Yes      | Task priority level: `HIGH`, `MEDIUM`, `LOW`                                 |
+| **Due Date** | Date   | Yes      | Target completion date                                                       |
+| **Category** | String | Yes      | Learning domain (e.g., "Frontend", "Backend", "Infrastructure", "Algorithm") |
 
 #### Status Definitions
 
@@ -76,9 +77,65 @@ The primary feature of this application is to manage learning tasks with the fol
 
 ### 4.3 Security
 
-- **NFR-3.1**: Users shall authenticate via AWS Cognito
-- **NFR-3.2**: Users shall only access their own tasks (data isolation)
-- **NFR-3.3**: All API requests shall be authenticated and authorized
+#### 4.3.1 Authentication & Identity Management
+
+- **NFR-3.1.1**: Users shall authenticate via AWS Cognito with email verification
+- **NFR-3.1.2**: Passwords shall meet minimum complexity requirements:
+  - Minimum 8 characters
+  - At least one uppercase letter
+  - At least one lowercase letter
+  - At least one number
+  - At least one special character
+- **NFR-3.1.3**: JWT tokens shall expire after 1 hour of inactivity
+- **NFR-3.1.4**: Refresh tokens shall be securely stored using httpOnly cookies
+- **NFR-3.1.5**: Failed login attempts shall be rate-limited (max 5 attempts per 15 minutes)
+
+#### 4.3.2 Authorization & Access Control
+
+- **NFR-3.2.1**: Users shall only access their own tasks (row-level security enforced by `userId`)
+- **NFR-3.2.2**: All GraphQL mutations shall verify user ownership before allowing modifications
+- **NFR-3.2.3**: AppSync resolvers shall enforce authorization rules at the field level
+- **NFR-3.2.4**: API requests without valid JWT tokens shall return 401 Unauthorized
+- **NFR-3.2.5**: API requests attempting to access unauthorized resources shall return 403 Forbidden
+
+#### 4.3.3 Data Protection
+
+- **NFR-3.3.1**: All data in transit shall be encrypted using TLS 1.2 or higher
+- **NFR-3.3.2**: DynamoDB data at rest shall be encrypted using AWS managed keys
+- **NFR-3.3.3**: Sensitive user data (email addresses) shall not be logged in plain text
+- **NFR-3.3.4**: User passwords shall never be stored in plain text (handled by Cognito)
+- **NFR-3.3.5**: JWT tokens shall not be stored in localStorage (use httpOnly cookies)
+
+#### 4.3.4 Input Validation & API Security
+
+- **NFR-3.4.1**: All user inputs shall be validated and sanitized on both client and server side
+- **NFR-3.4.2**: GraphQL queries shall have a maximum depth limit of 5 to prevent DoS attacks
+- **NFR-3.4.3**: API rate limiting shall be enforced at 100 requests per minute per user
+- **NFR-3.4.4**: CORS policy shall restrict allowed origins to the production domain only
+- **NFR-3.4.5**: GraphQL schema shall validate input types and reject malformed requests
+- **NFR-3.4.6**: File uploads shall not be allowed in Phase 1 (future consideration)
+
+#### 4.3.5 Security Monitoring & Logging
+
+- **NFR-3.5.1**: Failed authentication attempts shall be logged to CloudWatch
+- **NFR-3.5.2**: Suspicious activity (rate limit exceeded, invalid tokens) shall trigger CloudWatch alarms
+- **NFR-3.5.3**: Access logs shall be retained for 90 days
+- **NFR-3.5.4**: Security events (failed auth, authorization failures) shall be monitored and dashboarded
+- **NFR-3.5.5**: Application logs shall not contain sensitive data (passwords, tokens, PII)
+
+#### 4.3.6 Compliance & Best Practices
+
+- **NFR-3.6.1**: Application shall follow OWASP Top 10 mitigation strategies
+- **NFR-3.6.2**: Dependencies shall be scanned for known vulnerabilities using `npm audit`
+- **NFR-3.6.3**: AWS resources shall follow the principle of least privilege (IAM policies)
+- **NFR-3.6.4**: Security headers shall be configured:
+  - `Strict-Transport-Security` (HSTS)
+  - `X-Frame-Options: DENY`
+  - `X-Content-Type-Options: nosniff`
+  - `Content-Security-Policy` (CSP)
+- **NFR-3.6.5**: Regular security reviews shall be conducted before each release
+
+**Note**: Advanced security features (MFA, AWS WAF, AWS GuardDuty) are deferred to Phase 2+ for cost optimization.
 
 ### 4.4 Scalability
 
@@ -98,41 +155,41 @@ graph TB
     subgraph "Client Layer"
         Browser[Web Browser]
     end
-    
+
     subgraph "AWS Cloud"
         subgraph "Frontend Hosting"
             Amplify[AWS Amplify Hosting]
             CloudFront[Amazon CloudFront CDN]
         end
-        
+
         subgraph "Authentication"
             Cognito[Amazon Cognito]
         end
-        
+
         subgraph "API Layer"
             AppSync[AWS AppSync<br/>GraphQL API]
         end
-        
+
         subgraph "Data Layer"
             DynamoDB[(Amazon DynamoDB)]
         end
-        
+
         subgraph "CI/CD"
             GitHub[GitHub Repository]
             Actions[GitHub Actions]
         end
     end
-    
+
     Browser -->|HTTPS| CloudFront
     CloudFront --> Amplify
     Browser -->|Auth Request| Cognito
     Browser -->|GraphQL Query/Mutation| AppSync
     AppSync -->|Verify Token| Cognito
     AppSync -->|Read/Write| DynamoDB
-    
+
     GitHub -->|Push| Actions
     Actions -->|Deploy| Amplify
-    
+
     style Browser fill:#e1f5ff
     style Amplify fill:#ff9900
     style CloudFront fill:#ff9900
@@ -155,17 +212,17 @@ graph TB
         GraphQLClient[Apollo Client /<br/>AWS Amplify Client]
         AuthContext[Auth Context]
     end
-    
+
     subgraph "Backend - AWS AppSync"
         Schema[GraphQL Schema]
         Resolvers[Resolvers]
         AuthZ[Authorization Rules]
     end
-    
+
     subgraph "Data Store"
         TasksTable[Tasks Table<br/>DynamoDB]
     end
-    
+
     Pages --> Components
     Components --> GraphQLClient
     Components --> AuthContext
@@ -173,7 +230,7 @@ graph TB
     Schema --> Resolvers
     Resolvers --> AuthZ
     AuthZ -->|Validated Request| TasksTable
-    
+
     style Pages fill:#61dafb
     style Components fill:#61dafb
     style GraphQLClient fill:#61dafb
@@ -195,11 +252,11 @@ sequenceDiagram
     participant Cognito
     participant AppSync
     participant DynamoDB
-    
+
     User->>Browser: Open Application
     Browser->>Cognito: Request Authentication
     Cognito-->>Browser: Return JWT Token
-    
+
     User->>Browser: Create Task
     Browser->>AppSync: GraphQL Mutation<br/>(with JWT)
     AppSync->>Cognito: Validate Token
@@ -209,7 +266,7 @@ sequenceDiagram
     DynamoDB-->>AppSync: Success
     AppSync-->>Browser: Task Created
     Browser-->>User: Display Success
-    
+
     User->>Browser: View Task List
     Browser->>AppSync: GraphQL Query<br/>(with JWT)
     AppSync->>Cognito: Validate Token
@@ -225,18 +282,21 @@ sequenceDiagram
 ## 6. Technical Stack
 
 ### Frontend
+
 - **Framework**: Next.js (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui
 
 ### Backend
+
 - **Infrastructure**: AWS Amplify Gen 2 (TypeScript-based IaC)
 - **Authentication**: AWS Cognito
 - **Database**: Amazon DynamoDB
 - **API**: AWS AppSync (GraphQL)
 
 ### CI/CD
+
 - **Version Control**: GitHub
 - **Pipeline**: GitHub Actions
 
@@ -248,15 +308,15 @@ sequenceDiagram
 
 ```typescript
 interface Task {
-  id: string;                    // Unique identifier (UUID)
-  userId: string;                // Owner of the task (from Cognito)
-  title: string;                 // Task name
-  status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
-  priority: 'HIGH' | 'MEDIUM' | 'LOW';
-  dueDate: string;               // ISO 8601 date format
-  category: string;              // Learning domain
-  createdAt: string;             // ISO 8601 timestamp
-  updatedAt: string;             // ISO 8601 timestamp
+  id: string; // Unique identifier (UUID)
+  userId: string; // Owner of the task (from Cognito)
+  title: string; // Task name
+  status: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
+  priority: "HIGH" | "MEDIUM" | "LOW";
+  dueDate: string; // ISO 8601 date format
+  category: string; // Learning domain
+  createdAt: string; // ISO 8601 timestamp
+  updatedAt: string; // ISO 8601 timestamp
 }
 ```
 
@@ -265,7 +325,7 @@ interface Task {
 - **Table Name**: `Tasks`
 - **Partition Key**: `userId` (String)
 - **Sort Key**: `id` (String)
-- **GSI (Global Secondary Index)**: 
+- **GSI (Global Secondary Index)**:
   - `StatusIndex`: Partition Key = `userId`, Sort Key = `status`
   - `DueDateIndex`: Partition Key = `userId`, Sort Key = `dueDate`
 
@@ -297,6 +357,8 @@ interface Task {
 
 The following features are **not included in Phase 1** but may be considered for future iterations:
 
+**Task Management Features:**
+
 - Subtasks / nested tasks
 - Time tracking (estimated hours, actual hours)
 - Learning resources (URLs, notes)
@@ -307,6 +369,15 @@ The following features are **not included in Phase 1** but may be considered for
 - Difficulty levels
 - Tags and advanced search
 - Analytics and insights
+
+**Advanced Security Features (Phase 2+):**
+
+- Multi-Factor Authentication (MFA)
+- AWS WAF (Web Application Firewall)
+- AWS GuardDuty (threat detection)
+- Advanced DDoS protection
+- Penetration testing
+- Security incident response automation
 
 ---
 
@@ -325,6 +396,8 @@ Phase 1 will be considered successful when:
 
 ## 10. Acceptance Criteria
 
+### Functional Criteria
+
 - [ ] User can sign up and log in via AWS Cognito
 - [ ] User can create a task with title, status, priority, due date, and category
 - [ ] User can view a list of all their tasks
@@ -338,6 +411,23 @@ Phase 1 will be considered successful when:
 - [ ] Code follows TypeScript best practices and includes type safety
 - [ ] README includes setup instructions and project overview
 
+### Security Criteria
+
+- [ ] Password complexity requirements are enforced during registration
+- [ ] Email verification is required before first login
+- [ ] JWT tokens expire after 1 hour of inactivity
+- [ ] Users cannot access other users' tasks (verified via API testing)
+- [ ] API requests without valid JWT return 401 Unauthorized
+- [ ] All data is transmitted over HTTPS (TLS 1.2+)
+- [ ] DynamoDB encryption at rest is enabled
+- [ ] GraphQL query depth limiting is configured (max depth 5)
+- [ ] API rate limiting prevents abuse (100 requests/min per user)
+- [ ] CORS policy restricts to production domain only
+- [ ] Security headers are configured (HSTS, X-Frame-Options, CSP, X-Content-Type-Options)
+- [ ] npm audit shows no high or critical vulnerabilities
+- [ ] Failed authentication attempts are logged to CloudWatch
+- [ ] CloudWatch alarms are configured for suspicious activity
+
 ---
 
 ## Document Information
@@ -346,5 +436,3 @@ Phase 1 will be considered successful when:
 - **Last Updated**: 2026-02-16
 - **Author**: John ([github](https://github.com/vanilla2412))
 - **Status**: Draft
-
-
