@@ -6,7 +6,6 @@
 **Purpose:** A learning task management application designed to help users track and organize their learning tasks systematically.
 
 **Target Users:**
-
 - Individuals managing self-paced learning goals
 - Users who need structured task tracking for skill development
 
@@ -20,13 +19,13 @@ The primary feature of this application is to manage learning tasks with the fol
 
 #### Task Properties
 
-| Property     | Type   | Required | Description                                                                  |
-| ------------ | ------ | -------- | ---------------------------------------------------------------------------- |
-| **Title**    | String | Yes      | Name of the learning task (e.g., "Learn Next.js App Router")                 |
-| **Status**   | Enum   | Yes      | Current state of the task: `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`         |
-| **Priority** | Enum   | Yes      | Task priority level: `HIGH`, `MEDIUM`, `LOW`                                 |
-| **Due Date** | Date   | Yes      | Target completion date                                                       |
-| **Category** | String | Yes      | Learning domain (e.g., "Frontend", "Backend", "Infrastructure", "Algorithm") |
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| **Title** | String | Yes | Name of the learning task (e.g., "Learn Next.js App Router") |
+| **Status** | Enum | Yes | Current state of the task: `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED` |
+| **Priority** | Enum | Yes | Task priority level: `HIGH`, `MEDIUM`, `LOW` |
+| **Due Date** | Date | Yes | Target completion date |
+| **Category** | String | Yes | Learning domain (e.g., "Frontend", "Backend", "Infrastructure", "Algorithm") |
 
 #### Status Definitions
 
@@ -99,41 +98,41 @@ graph TB
     subgraph "Client Layer"
         Browser[Web Browser]
     end
-
+    
     subgraph "AWS Cloud"
         subgraph "Frontend Hosting"
             Amplify[AWS Amplify Hosting]
             CloudFront[Amazon CloudFront CDN]
         end
-
+        
         subgraph "Authentication"
             Cognito[Amazon Cognito]
         end
-
+        
         subgraph "API Layer"
             AppSync[AWS AppSync<br/>GraphQL API]
         end
-
+        
         subgraph "Data Layer"
             DynamoDB[(Amazon DynamoDB)]
         end
-
+        
         subgraph "CI/CD"
             GitHub[GitHub Repository]
             Actions[GitHub Actions]
         end
     end
-
+    
     Browser -->|HTTPS| CloudFront
     CloudFront --> Amplify
     Browser -->|Auth Request| Cognito
     Browser -->|GraphQL Query/Mutation| AppSync
     AppSync -->|Verify Token| Cognito
     AppSync -->|Read/Write| DynamoDB
-
+    
     GitHub -->|Push| Actions
     Actions -->|Deploy| Amplify
-
+    
     style Browser fill:#e1f5ff
     style Amplify fill:#ff9900
     style CloudFront fill:#ff9900
@@ -156,17 +155,17 @@ graph TB
         GraphQLClient[Apollo Client /<br/>AWS Amplify Client]
         AuthContext[Auth Context]
     end
-
+    
     subgraph "Backend - AWS AppSync"
         Schema[GraphQL Schema]
         Resolvers[Resolvers]
         AuthZ[Authorization Rules]
     end
-
+    
     subgraph "Data Store"
         TasksTable[Tasks Table<br/>DynamoDB]
     end
-
+    
     Pages --> Components
     Components --> GraphQLClient
     Components --> AuthContext
@@ -174,7 +173,7 @@ graph TB
     Schema --> Resolvers
     Resolvers --> AuthZ
     AuthZ -->|Validated Request| TasksTable
-
+    
     style Pages fill:#61dafb
     style Components fill:#61dafb
     style GraphQLClient fill:#61dafb
@@ -196,11 +195,11 @@ sequenceDiagram
     participant Cognito
     participant AppSync
     participant DynamoDB
-
+    
     User->>Browser: Open Application
     Browser->>Cognito: Request Authentication
     Cognito-->>Browser: Return JWT Token
-
+    
     User->>Browser: Create Task
     Browser->>AppSync: GraphQL Mutation<br/>(with JWT)
     AppSync->>Cognito: Validate Token
@@ -210,7 +209,7 @@ sequenceDiagram
     DynamoDB-->>AppSync: Success
     AppSync-->>Browser: Task Created
     Browser-->>User: Display Success
-
+    
     User->>Browser: View Task List
     Browser->>AppSync: GraphQL Query<br/>(with JWT)
     AppSync->>Cognito: Validate Token
@@ -226,21 +225,18 @@ sequenceDiagram
 ## 6. Technical Stack
 
 ### Frontend
-
 - **Framework**: Next.js (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui
 
 ### Backend
-
 - **Infrastructure**: AWS Amplify Gen 2 (TypeScript-based IaC)
 - **Authentication**: AWS Cognito
 - **Database**: Amazon DynamoDB
 - **API**: AWS AppSync (GraphQL)
 
 ### CI/CD
-
 - **Version Control**: GitHub
 - **Pipeline**: GitHub Actions
 
@@ -252,15 +248,15 @@ sequenceDiagram
 
 ```typescript
 interface Task {
-  id: string; // Unique identifier (UUID)
-  userId: string; // Owner of the task (from Cognito)
-  title: string; // Task name
-  status: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
-  priority: "HIGH" | "MEDIUM" | "LOW";
-  dueDate: string; // ISO 8601 date format
-  category: string; // Learning domain
-  createdAt: string; // ISO 8601 timestamp
-  updatedAt: string; // ISO 8601 timestamp
+  id: string;                    // Unique identifier (UUID)
+  userId: string;                // Owner of the task (from Cognito)
+  title: string;                 // Task name
+  status: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
+  priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  dueDate: string;               // ISO 8601 date format
+  category: string;              // Learning domain
+  createdAt: string;             // ISO 8601 timestamp
+  updatedAt: string;             // ISO 8601 timestamp
 }
 ```
 
@@ -269,7 +265,7 @@ interface Task {
 - **Table Name**: `Tasks`
 - **Partition Key**: `userId` (String)
 - **Sort Key**: `id` (String)
-- **GSI (Global Secondary Index)**:
+- **GSI (Global Secondary Index)**: 
   - `StatusIndex`: Partition Key = `userId`, Sort Key = `status`
   - `DueDateIndex`: Partition Key = `userId`, Sort Key = `dueDate`
 
@@ -314,9 +310,41 @@ The following features are **not included in Phase 1** but may be considered for
 
 ---
 
+## 9. Success Criteria
+
+Phase 1 will be considered successful when:
+
+1. Users can perform full CRUD operations on learning tasks
+2. Users can filter and sort tasks by status, priority, category, and due date
+3. The application is deployed on AWS with authentication
+4. The UI is responsive and follows modern design standards
+5. All core functional requirements (FR-1.x, FR-2.x, FR-3.x) are implemented
+6. The codebase follows TypeScript best practices and maintains type safety
+
+---
+
+## 10. Acceptance Criteria
+
+- [ ] User can sign up and log in via AWS Cognito
+- [ ] User can create a task with title, status, priority, due date, and category
+- [ ] User can view a list of all their tasks
+- [ ] User can edit any task property
+- [ ] User can delete a task
+- [ ] User can change task status (NOT_STARTED → IN_PROGRESS → COMPLETED)
+- [ ] User can filter tasks by status, priority, and category
+- [ ] User can sort tasks by due date and priority
+- [ ] UI is responsive on desktop and mobile
+- [ ] Application is deployed to AWS and accessible via HTTPS
+- [ ] Code follows TypeScript best practices and includes type safety
+- [ ] README includes setup instructions and project overview
+
+---
+
 ## Document Information
 
 - **Version**: 1.0.0
 - **Last Updated**: 2026-02-16
 - **Author**: John ([github](https://github.com/vanilla2412))
 - **Status**: Draft
+
+
