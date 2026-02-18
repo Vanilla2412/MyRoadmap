@@ -25,6 +25,8 @@
   "homepage": "https://github.com/Vanilla2412/MyRoadmap#readme",
   "description": "",
   "devDependencies": {
-    "vitepress": "^1.6.4"
+    "mermaid": "^11.12.3",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-mermaid": "^2.0.17"
   }
 }
