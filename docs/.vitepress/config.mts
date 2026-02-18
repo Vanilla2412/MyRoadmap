@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: 'My Roadmap',
   description: 'Learning Task Management Application - Professional portfolio project',
   
@@ -28,4 +29,4 @@ export default defineConfig({
       copyright: 'Copyright © 2026 Vanilla2412'
     }
   }
-})
+}))
