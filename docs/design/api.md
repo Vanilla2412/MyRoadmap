@@ -79,6 +79,39 @@
 
 ## 4. Error Handling
 
+### 4.1 REST / Typical HTTP Errors
+
 - **401 Unauthorized**: Missing or invalid JWT token.
 - **403 Forbidden**: Valid token but accessing a resource owned by another user.
 - **400 Bad Request**: Invalid input (e.g., missing required field, wrong type).
+
+### 4.2 AppSync / GraphQL Specifications
+
+GraphQL endpoints (managed via AWS AppSync) differ from typical REST APIs. We define the following error handling specifications for the frontend to consume.
+
+#### 4.2.1 HTTP Status vs. GraphQL Errors
+
+- **HTTP 200 OK**: Even when an authorization or validation error occurs, AppSync will typically return an HTTP 200 response with an `errors` array in the JSON body.
+- **HTTP 4xx / 5xx**: Reserved for severe network issues, WAF blocks, or service outages.
+
+#### 4.2.2 Error Response Parsing
+
+The frontend (Next.js) must inspect the `errors` array in the response to correctly provide user feedback.
+
+```json
+{
+  "data": {
+    "createTask": null
+  },
+  "errors": [
+    {
+      "message": "Not Authorized to access createTask on type Mutation",
+      "errorType": "Unauthorized",
+      "path": ["createTask"]
+    }
+  ]
+}
+```
+
+- **Validation Errors**: `errorType` will indicate schema validation failures (e.g., missing fields, type mismatches).
+- **Auth Errors**: `errorType` such as `"Unauthorized"` will be caught by `allow.owner()` directives. The frontend should handle this by redirecting to login or showing a permission denied toast.
