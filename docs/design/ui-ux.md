@@ -126,3 +126,25 @@ Using Modals (Dialogs) or Drawers (Sheet) prevents context switching, keeping th
 - **Danger**: Red/Rose (Overdue, Delete).
 - **Success**: Emerald/Green (Completion).
 - **Warning**: Amber (Medium Priority, Approaching Due Date).
+
+## 7. Input Validation Strategy
+
+Validation must be coordinated across layers. While the GraphQL schema enforces static type checks (e.g., required strings, enums, dates), business logic constraints require targeted validation.
+
+### 7.1 Business Logic Rules
+
+Examples of business constraints:
+
+- "Due Date (`dueDate`) cannot be a past date."
+- "Title length cannot exceed 100 characters."
+
+### 7.2 Validation Implementation (MVP vs. Future)
+
+- **Frontend (Next.js - MVP Focus)**:
+  - In the initial MVP phase, business logic validation will be handled **entirely on the frontend**.
+  - Libraries like **Zod** and **React Hook Form** will catch invalid inputs (like past dates) before the GraphQL mutation is dispatched.
+  - _Why?_ Faster iteration, immediate user feedback, and simpler backend configurations for the MVP.
+
+- **Backend (Amplify / DynamoDB - Future)**:
+  - For production-level resilience (preventing API abuse that bypasses the UI), backend validation is necessary.
+  - _Future Plan_: Implement AppSync pipeline resolvers or Lambda triggers (e.g., Pre-Token Generation or custom mutation handlers) to enforce complex business logic before writing to DynamoDB.
