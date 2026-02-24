@@ -7,7 +7,6 @@ docs/.vitepress/cache
 
 # Node.js
 node_modules/
-package-lock.json
 
 # Environment variables
 .env
