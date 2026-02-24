@@ -24,10 +24,9 @@ jobs:
           node-version: "20.x"
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Install Linux native bindings
-        run: npm install lightningcss-linux-x64-gnu --ignore-scripts=false
+        run: |
+          rm -f package-lock.json
+          npm install
 
       - name: Run ESLint
         run: npm run lint
