@@ -1,28 +1,28 @@
-## Summary
+## Description
 
-<!-- Briefly describe the changes in this PR -->
+<!-- Briefly describe the changes introduced by this PR -->
+<!-- Specifically for AI Agents: Detail what changes were made and why -->
 
-## Type of Change
+## Related Issue
 
-- [ ] ✨ Feature (new functionality)
-- [ ] 🐛 Bug Fix (fixes an issue)
-- [ ] 📝 Documentation (documentation only)
-- [ ] ♻️ Refactor (code restructuring, no behavior change)
-- [ ] 🔧 Chore (build, CI, dependency updates)
+<!-- IMPORTANT: Link your PR to an issue using "Closes #123" syntax so it automatically transitions in the Project -->
 
-## Related Issues
+Closes #
 
-<!-- Link to related issues, e.g., Closes #123 -->
+## Acceptance Criteria Met
 
-## Changes Made
+- [ ]
+- [ ]
 
-<!-- List the specific changes made -->
+## Testing Performed
 
--
+<!-- Describe how these changes were tested -->
 
-## Checklist
+- [ ] Tested locally (e.g., `npm run dev`, `amplify sandbox`)
+- [ ] GitHub Actions CI passed
 
-- [ ] Code follows the project's TypeScript style guidelines
-- [ ] Self-review of code completed
-- [ ] Documentation updated (if applicable)
-- [ ] No new warnings or errors introduced
+## Screenshots (If Applicable)
+
+| Before | After |
+| ------ | ----- |
+|        |       |

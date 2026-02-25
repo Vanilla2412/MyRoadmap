@@ -1,0 +1,52 @@
+name: "Feature / Task"
+description: "Create a new task for AI-driven or manual development (1-2 hours estimation)"
+title: "feat: [Short description]"
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Overview
+        Ensure this task is small enough to be completed within 1-2 hours.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "Context / Background"
+      description: "Why are we doing this? Provide relevant background."
+      placeholder: "e.g., We need a login UI so users can authenticate using Cognito."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Acceptance Criteria"
+      description: "What are the exact conditions for this task to be considered Done?"
+      value: |
+        - [ ] 
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: target_files
+    attributes:
+      label: "Target Files"
+      description: "List the essential files to be modified or created."
+      placeholder: "e.g., `web/amplify/auth/resource.ts`"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: estimated_size
+    attributes:
+      label: "Estimated Size"
+      description: "Ensure the task is no larger than 'S (1-2h)'."
+      options:
+        - "XS (< 1h)"
+        - "S (1-2h)"
+        - "M (Half day) - Consider splitting if possible"
+        - "L (1 day+) - MUST BE SPLIT"
+    validations:
+      required: true
