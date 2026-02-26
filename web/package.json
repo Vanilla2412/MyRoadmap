@@ -41,5 +41,8 @@
   },
   "optionalDependencies": {
     "lightningcss-linux-x64-gnu": "1.31.1"
+  },
+  "overrides": {
+    "graphql": "^15.8.0"
   }
 }
