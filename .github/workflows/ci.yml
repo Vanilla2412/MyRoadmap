@@ -22,11 +22,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: "web/package-lock.json"
 
       - name: Install dependencies
         run: |
           rm -f package-lock.json
           npm install
+
+      - name: Create dummy amplify_outputs.json
+        run: echo "{}" > amplify_outputs.json
+
+      - name: Run TypeCheck
+        run: npm run typecheck
 
       - name: Run ESLint
         run: npm run lint
