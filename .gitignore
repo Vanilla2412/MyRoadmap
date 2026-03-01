@@ -34,7 +34,7 @@ dist/
 build/
 
 # AWS Amplify
-amplify/
+.amplify/
 .amplifyrc
 amplify-backup/
 
