@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MoreVertical, Edit2, Trash2 } from 'lucide-react';
+import { MoreVertical, Edit2, Trash2, Calendar, Tag } from 'lucide-react';
 import { Task, UpdateTaskInput } from '../lib/tasks';
 import EditTaskModal from './EditTaskModal';
 import {
@@ -46,9 +46,19 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
     DONE: 'bg-green-100 text-green-800 border-green-200',
   };
 
+  const priorityColors = {
+    LOW: 'bg-slate-100 text-slate-700',
+    MEDIUM: 'bg-orange-100 text-orange-700',
+    HIGH: 'bg-red-100 text-red-700',
+  };
+
+  const formattedDate = task.dueDate 
+    ? new Date(task.dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    : null;
+
   return (
     <>
-      <div className={`bg-white border border-gray-200 rounded-lg p-5 shadow-sm flex flex-col justify-between h-48 transition-all hover:shadow-md ${isDeleting ? 'opacity-50 pointer-events-none' : ''}`}>
+      <div className={`bg-white border border-gray-200 rounded-lg p-5 shadow-sm flex flex-col justify-between h-56 transition-all hover:shadow-md ${isDeleting ? 'opacity-50 pointer-events-none' : ''}`}>
         <div>
           <div className="flex justify-between items-start mb-2">
             <h3 className="text-lg font-semibold text-gray-900 line-clamp-1" title={task.title}>
@@ -72,7 +82,28 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <p className="text-sm text-gray-600 line-clamp-3" title={task.description || ''}>
+          
+          <div className="flex flex-wrap gap-2 mb-3">
+            {task.priority && (
+              <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded ${priorityColors[task.priority as keyof typeof priorityColors]}`}>
+                {task.priority}
+              </span>
+            )}
+            {task.category && (
+              <span className="text-xs text-gray-500 flex items-center bg-gray-50 px-2 py-0.5 rounded border border-gray-100">
+                <Tag className="w-3 h-3 mr-1" />
+                {task.category}
+              </span>
+            )}
+            {formattedDate && (
+              <span className="text-xs text-gray-500 flex items-center bg-gray-50 px-2 py-0.5 rounded border border-gray-100">
+                <Calendar className="w-3 h-3 mr-1" />
+                {formattedDate}
+              </span>
+            )}
+          </div>
+
+          <p className="text-sm text-gray-600 line-clamp-2" title={task.description || ''}>
             {task.description || 'No description provided.'}
           </p>
         </div>
