@@ -30,8 +30,8 @@ type TaskFormProps = {
 
 export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel, onCancel }: TaskFormProps) {
   const form = useForm<TaskFormValues>({
-    // @ts-expect-error: Legacy peer dependency mismatch between amplify ui and react-hook-form
-    resolver: zodResolver(taskSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(taskSchema) as any,
     defaultValues: {
       title: defaultValues?.title || '',
       description: defaultValues?.description || '',
