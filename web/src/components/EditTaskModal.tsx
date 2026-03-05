@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreateTaskInput } from '../lib/tasks';
+import { Task, UpdateTaskInput } from '../lib/tasks';
 import { TaskForm } from './TaskForm';
 import { TaskFormValues } from '../lib/validations';
 import {
@@ -9,13 +9,14 @@ import {
   DialogTitle,
 } from './ui/dialog';
 
-type CreateTaskModalProps = {
+type EditTaskModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (input: CreateTaskInput) => Promise<void>;
+  task: Task;
+  onEdit: (input: UpdateTaskInput) => Promise<void>;
 };
 
-export default function CreateTaskModal({ isOpen, onClose, onCreate }: CreateTaskModalProps) {
+export default function EditTaskModal({ isOpen, onClose, task, onEdit }: EditTaskModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,14 +24,15 @@ export default function CreateTaskModal({ isOpen, onClose, onCreate }: CreateTas
     setIsSubmitting(true);
     setError(null);
     try {
-      await onCreate({
+      await onEdit({
+        id: task.id,
         title: values.title.trim(),
         description: values.description?.trim() || undefined,
         status: values.status,
       });
       onClose();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to create task');
+      setError(err instanceof Error ? err.message : 'Failed to save task');
     } finally {
       setIsSubmitting(false);
     }
@@ -40,7 +42,7 @@ export default function CreateTaskModal({ isOpen, onClose, onCreate }: CreateTas
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create New Task</DialogTitle>
+          <DialogTitle>Edit Task</DialogTitle>
         </DialogHeader>
         {error && (
           <div className="mb-4 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-100">
@@ -48,9 +50,14 @@ export default function CreateTaskModal({ isOpen, onClose, onCreate }: CreateTas
           </div>
         )}
         <TaskForm
+          defaultValues={{
+            title: task.title,
+            description: task.description || '',
+            status: task.status || 'TODO',
+          }}
           onSubmit={handleSubmit}
           isSubmitting={isSubmitting}
-          submitLabel="Create Task"
+          submitLabel="Save Changes"
           onCancel={onClose}
         />
       </DialogContent>
