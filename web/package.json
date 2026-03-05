@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.7.2",
     "@aws-amplify/ui-react": "^6.9.0",
+    "@hookform/resolvers": "^5.2.2",
     "aws-amplify": "^6.16.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -20,8 +21,10 @@
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hook-form": "^7.71.2",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.21.0",
