@@ -19,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { CreateTaskInput, UpdateTaskInput, Task } from '../lib/tasks';
 
 type TaskFormProps = {
   defaultValues?: Partial<TaskFormValues>;
@@ -31,7 +30,8 @@ type TaskFormProps = {
 
 export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel, onCancel }: TaskFormProps) {
   const form = useForm<TaskFormValues>({
-    resolver: zodResolver(taskSchema) as any,
+    // @ts-expect-error: Legacy peer dependency mismatch between amplify ui and react-hook-form
+    resolver: zodResolver(taskSchema),
     defaultValues: {
       title: defaultValues?.title || '',
       description: defaultValues?.description || '',
