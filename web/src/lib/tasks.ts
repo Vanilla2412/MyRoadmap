@@ -12,6 +12,9 @@ export type CreateTaskInput = {
   title: string;
   description?: string;
   status?: 'TODO' | 'IN_PROGRESS' | 'DONE';
+  priority?: 'LOW' | 'MEDIUM' | 'HIGH';
+  dueDate?: string;
+  category?: string;
 };
 
 // Require ID for updates, other fields optional
@@ -20,6 +23,9 @@ export type UpdateTaskInput = {
   title?: string;
   description?: string;
   status?: 'TODO' | 'IN_PROGRESS' | 'DONE';
+  priority?: 'LOW' | 'MEDIUM' | 'HIGH';
+  dueDate?: string;
+  category?: string;
 };
 
 // --- CRUD Operations ---
@@ -51,6 +57,9 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
       title: input.title,
       description: input.description,
       status: input.status || 'TODO',
+      priority: input.priority,
+      dueDate: input.dueDate,
+      category: input.category,
     });
     
     if (errors || !newTask) {

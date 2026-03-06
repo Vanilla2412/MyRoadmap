@@ -8,6 +8,9 @@ const schema = a.schema({
       title: a.string().required(),
       description: a.string(),
       status: a.enum(['TODO', 'IN_PROGRESS', 'DONE']),
+      priority: a.enum(["LOW", "MEDIUM", "HIGH"]),
+      dueDate: a.date(),
+      category: a.string(),
     })
     .authorization((allow) => [allow.owner()]),
 });
