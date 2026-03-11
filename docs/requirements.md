@@ -398,18 +398,18 @@ Phase 1 will be considered successful when:
 
 ### Functional Criteria
 
-- [ ] User can sign up and log in via AWS Cognito
-- [ ] User can create a task with title, status, priority, due date, and category
-- [ ] User can view a list of all their tasks
-- [ ] User can edit any task property
-- [ ] User can delete a task
-- [ ] User can change task status (NOT_STARTED → IN_PROGRESS → COMPLETED)
-- [ ] User can filter tasks by status, priority, and category
-- [ ] User can sort tasks by due date and priority
-- [ ] UI is responsive on desktop and mobile
-- [ ] Application is deployed to AWS and accessible via HTTPS
-- [ ] Code follows TypeScript best practices and includes type safety
-- [ ] README includes setup instructions and project overview
+- [x] User can sign up and log in via AWS Cognito
+- [x] User can create a task with title, status, priority, due date, and category
+- [x] User can view a list of all their tasks
+- [x] User can edit any task property
+- [x] User can delete a task
+- [x] User can change task status (NOT_STARTED → IN_PROGRESS → COMPLETED)
+- [x] User can filter tasks by status, priority, and category
+- [x] User can sort tasks by due date and priority
+- [x] UI is responsive on desktop and mobile
+- [x] Application is deployed to AWS and accessible via HTTPS
+- [x] Code follows TypeScript best practices and includes type safety
+- [x] README includes setup instructions and project overview
 
 ### Security Criteria
 
@@ -433,6 +433,6 @@ Phase 1 will be considered successful when:
 ## Document Information
 
 - **Version**: 1.0.0
-- **Last Updated**: 2026-02-16
+- **Last Updated**: 2026-03-11
 - **Author**: John ([github](https://github.com/vanilla2412))
 - **Status**: Draft
