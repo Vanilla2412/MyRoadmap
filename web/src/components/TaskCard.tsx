@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { MoreVertical, Edit2, Trash2, Calendar, Tag } from 'lucide-react';
+import { MoreVertical, Edit2, Trash2, Calendar, Tag, AlertCircle } from 'lucide-react';
+import { isPast } from 'date-fns';
 import { Task, UpdateTaskInput } from '../lib/tasks';
 import EditTaskModal from './EditTaskModal';
 import {
@@ -56,9 +57,14 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
     ? new Date(task.dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
     : null;
 
+  // Overdue: past due date AND not yet completed
+  const isOverdue = task.dueDate
+    ? isPast(new Date(task.dueDate)) && task.status !== 'DONE'
+    : false;
+
   return (
     <>
-      <div className={`bg-white border border-gray-200 rounded-lg p-5 shadow-sm flex flex-col justify-between h-56 transition-all hover:shadow-md ${isDeleting ? 'opacity-50 pointer-events-none' : ''}`}>
+      <div className={`bg-white border rounded-lg p-5 shadow-sm flex flex-col justify-between h-56 transition-all hover:shadow-md ${isDeleting ? 'opacity-50 pointer-events-none' : ''} ${isOverdue ? 'border-red-300 bg-red-50/20' : 'border-gray-200'}`}>
         <div>
           <div className="flex justify-between items-start mb-2">
             <h3 className="text-lg font-semibold text-gray-900 line-clamp-1" title={task.title}>
@@ -96,9 +102,14 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
               </span>
             )}
             {formattedDate && (
-              <span className="text-xs text-gray-500 flex items-center bg-gray-50 px-2 py-0.5 rounded border border-gray-100">
+              <span className={`text-xs flex items-center px-2 py-0.5 rounded border ${
+                isOverdue
+                  ? 'text-red-600 bg-red-50 border-red-200 font-medium'
+                  : 'text-gray-500 bg-gray-50 border-gray-100'
+              }`}>
                 <Calendar className="w-3 h-3 mr-1" />
                 {formattedDate}
+                {isOverdue && <AlertCircle className="w-3 h-3 ml-1" />}
               </span>
             )}
           </div>
