@@ -17,11 +17,16 @@ jobs:
     steps:
       - name: Trigger Amplify build (Scheduled)
         run: |
+          if [ -z "$AMPLIFY_APP_ID" ]; then
+            echo "Error: AMPLIFY_APP_ID secret is missing or empty."
+            exit 1
+          fi
           aws amplify start-job \
-            --app-id ${{ secrets.AMPLIFY_APP_ID }} \
+            --app-id "$AMPLIFY_APP_ID" \
             --branch-name main \
             --job-type RELEASE
         env:
+          AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
@@ -30,9 +35,11 @@ jobs:
         run: |
           echo "## 🚀 Amplify Deployment Report (Scheduled)" >> $GITHUB_STEP_SUMMARY
           echo "- **Triggered by**: Scheduled (Sunday 23:00 JST)" >> $GITHUB_STEP_SUMMARY
-          echo "- **App ID**: \`${{ secrets.AMPLIFY_APP_ID }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **App ID**: \`${AMPLIFY_APP_ID}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch**: \`main\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Status**: Job started successfully" >> $GITHUB_STEP_SUMMARY
+        env:
+          AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
 
   deploy-manual:
     if: github.event_name == 'workflow_dispatch'
@@ -41,11 +48,16 @@ jobs:
     steps:
       - name: Trigger Amplify build (Manual)
         run: |
+          if [ -z "$AMPLIFY_APP_ID" ]; then
+            echo "Error: AMPLIFY_APP_ID secret is missing or empty."
+            exit 1
+          fi
           aws amplify start-job \
-            --app-id ${{ secrets.AMPLIFY_APP_ID }} \
+            --app-id "$AMPLIFY_APP_ID" \
             --branch-name main \
             --job-type RELEASE
         env:
+          AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
@@ -55,6 +67,8 @@ jobs:
           echo "## 🚀 Amplify Deployment Report (Manual)" >> $GITHUB_STEP_SUMMARY
           echo "- **Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Reason**: ${{ github.event.inputs.reason }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **App ID**: \`${{ secrets.AMPLIFY_APP_ID }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **App ID**: \`${AMPLIFY_APP_ID}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch**: \`main\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Status**: Job started successfully (Approved by Admin)" >> $GITHUB_STEP_SUMMARY
+        env:
+          AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
