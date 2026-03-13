@@ -8,14 +8,16 @@ export default withMermaid(defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Requirements', link: '/requirements' }
+      { text: 'Requirements', link: '/requirements' },
+      { text: 'CI/CD', link: '/cicd' }
     ],
     
     sidebar: [
       {
         text: 'Documentation',
         items: [
-          { text: 'Requirements Specification', link: '/requirements' }
+          { text: 'Requirements Specification', link: '/requirements' },
+          { text: 'CI/CD Pipeline', link: '/cicd' }
         ]
       }
     ],

@@ -50,3 +50,4 @@ features:
 ### Documentation
 
 - [Requirements Specification](/requirements) - Comprehensive functional and non-functional requirements
+- [CI/CD Pipeline](/cicd) - Automated testing and deployment specifications
