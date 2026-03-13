@@ -93,3 +93,19 @@ These are the 1-2 hour estimation tasks (Size: S) broken down from `memo.md` for
   - [ ] The app is successfully built in the Amplify CI/CD console or via AWS CDK setup.
   - [ ] The live URL is active and functional.
 - **Estimated Size**: `S (1-2h)`
+
+---
+
+## Step 6: Observability & Notifications
+
+### Issue 9: Implement Slack Notifications for CI/CD Pipeline
+
+- **Title**: `feat: implement Slack notifications for CI/CD status`
+- **GitHub Issue**: [Closes #63](https://github.com/Vanilla2412/MyRoadmap/issues/63)
+- **Context**: Real-time feedback on build and deployment status is crucial for development efficiency.
+- **Acceptance Criteria**:
+  - [ ] Create a Slack Inbox Webhook.
+  - [ ] Store the Webhook URL in GitHub Secrets as `SLACK_WEBHOOK_URL`.
+  - [ ] Update `ci.yml` and `deploy.yml` to include notification steps.
+  - [ ] Verify that notifications are received in Slack for both success and failure states.
+- **Estimated Size**: `S (1-2h)`
