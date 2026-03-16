@@ -4,6 +4,8 @@
 
 **[日本語版 README はこちら](./README.ja.md) | [Japanese README Available](./README.ja.md)**
 
+📖 **[Live Documentation](https://vanilla2412.github.io/MyRoadmap/)**
+
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Next.js](https://img.shields.io/badge/Next.js-15+-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
@@ -175,10 +177,20 @@ See [`docs/requirements.md`](./docs/requirements.md) for the complete feature ro
 
 ## 🤝 Contributing
 
-This is a personal learning project, but feedback and suggestions are welcome! Feel free to:
+This is a professional portfolio project. While feedback is welcome, we follow standard open-source community guidelines.
 
-- Open an issue for bug reports or feature suggestions
-- Submit a pull request for improvements
+Please review our [Contributing Guidelines](./CONTRIBUTING.md) before getting started.
+
+- [Contributing Guide](./CONTRIBUTING.md)
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Security Policy](./SECURITY.md)
+
+---
+
+## 📌 Versioning
+
+This project adheres to [Semantic Versioning (SemVer)](https://semver.org/).
+We use [Release Drafter](https://github.com/release-drafter/release-drafter) to automate release notes based on pull request labels.
 
 ---
 
