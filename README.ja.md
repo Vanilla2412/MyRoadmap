@@ -4,6 +4,9 @@
 
 **[English README is available here](./README.md) | [英語版 README](./README.md)**
 
+📖 **[オンラインドキュメント（LIVE）](https://vanilla2412.github.io/MyRoadmap/)**
+迫力あるMermaid図解や詳細な要件定義書を確認できます。
+
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Next.js](https://img.shields.io/badge/Next.js-15+-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue)](https://www.typescriptlang.org/)
