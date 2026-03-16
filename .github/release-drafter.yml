@@ -1,5 +1,30 @@
 name-template: 'v$RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
+
+exclude-labels:
+  - 'skip-changelog'
+
+autolabeler:
+  - label: 'feat'
+    title:
+      - '/^feat:/i'
+    branch:
+      - '/^feat\//i'
+  - label: 'fix'
+    title:
+      - '/^fix:/i'
+    branch:
+      - '/^fix\//i'
+  - label: 'docs'
+    title:
+      - '/^docs:/i'
+    branch:
+      - '/^docs\//i'
+  - label: 'chore'
+    title:
+      - '/^chore:/i'
+    branch:
+      - '/^chore\//i'
 categories:
   - title: '🚀 Features'
     labels:
