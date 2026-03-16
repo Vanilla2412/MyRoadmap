@@ -49,3 +49,14 @@ jobs:
 
       - name: Build Next.js app
         run: npm run build
+
+      - name: Slack Notification
+        if: always()
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
+          payload: |
+            {
+              "text": "*CI Result*: ${{ job.status }}\n*Workflow*: ${{ github.workflow }}\n*Commit*: ${{ github.sha }}\n*URL*: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }

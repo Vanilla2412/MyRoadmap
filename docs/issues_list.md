@@ -93,3 +93,72 @@ These are the 1-2 hour estimation tasks (Size: S) broken down from `memo.md` for
   - [ ] The app is successfully built in the Amplify CI/CD console or via AWS CDK setup.
   - [ ] The live URL is active and functional.
 - **Estimated Size**: `S (1-2h)`
+
+---
+
+## Step 6: Observability & Notifications
+
+### Issue 9: Implement Slack Notifications for CI/CD Pipeline
+
+- **Title**: `feat: implement Slack notifications for CI/CD status`
+- **GitHub Issue**: [Closes #63](https://github.com/Vanilla2412/MyRoadmap/issues/63)
+- **Context**: Real-time feedback on build and deployment status is crucial for development efficiency.
+- **Acceptance Criteria**:
+  - [ ] Create a Slack Inbox Webhook.
+  - [ ] Store the Webhook URL in GitHub Secrets as `SLACK_WEBHOOK_URL`.
+  - [ ] Update `ci.yml` and `deploy.yml` to include notification steps.
+  - [ ] Verify that notifications are received in Slack for both success and failure states.
+- **Estimated Size**: `S (1-2h)`
+
+---
+
+## Step 7: Project Standards & Sustainability
+
+### Issue 10: GitHub Release Notes and Community Standards
+
+- **Title**: `chore: implement GitHub Release Notes and Community Standards`
+- **GitHub Issue**: [issue #64](https://github.com/Vanilla2412/MyRoadmap/issues/64)
+- **Context**: Transitioning the repository from a personal script to an open-source grade project requires standardized community files and automated versioning.
+- **Acceptance Criteria**:
+  - [ ] Create `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md`.
+  - [ ] Configure GitHub Actions to automate release note generation (e.g., via `release-drafter`).
+  - [ ] Document the project's versioning strategy (SemVer).
+- **Estimated Size**: `S (1-2h)`
+
+### Issue 11: Financial Cost Estimation and Analysis
+
+- **Title**: `docs: conduct project financial cost estimation and analysis`
+- **GitHub Issue**: [issue #65](https://github.com/Vanilla2412/MyRoadmap/issues/65)
+- **Context**: Demonstrating cost-awareness is a key engineering skill. We need to estimate the operating costs on AWS.
+- **Acceptance Criteria**:
+  - [ ] Research and estimate monthly costs for Amplify, Cognito, DynamoDB, and AppSync.
+  - [ ] Identify cost transition points when scaling beyond the AWS Free Tier.
+  - [ ] Create a cost analysis report in Markdown.
+- **Estimated Size**: `S (1-2h)`
+
+---
+
+## Step 8: Future Planning (Phase 3 & 4)
+
+### Issue 12: Phase 3 - AWS Cost Design and Operations Policy
+
+- **Title**: `feat: define Phase 3 AWS cost design and operations policy`
+- **GitHub Issue**: [issue #66](https://github.com/Vanilla2412/MyRoadmap/issues/66)
+- **Context**: Operational excellence involves designing for cost-efficiency and reliable maintenance.
+- **Acceptance Criteria**:
+  - [ ] Define budget alerts and cost monitoring strategies.
+  - [ ] Design resource management policies (log retention, cleanup schedules).
+  - [ ] Establish a disaster recovery and automated backup policy.
+- **Estimated Size**: `S (1-2h)`
+
+### Issue 13: Phase 4 - AI Integration and MLOps Foundation
+
+- **Title**: `feat: research Phase 4 AI integration and MLOps foundation`
+- **GitHub Issue**: [issue #67](https://github.com/Vanilla2412/MyRoadmap/issues/67)
+- **Context**: Preparing for AI features and building the foundation for MLOps skills.
+- **Acceptance Criteria**:
+  - [ ] Define requirements for AI features (e.g., auto-categorization, priority recommendation).
+  - [ ] Evaluate AWS-native AI services (SageMaker, Bedrock, etc.) for integration.
+  - [ ] Outline a roadmap for transitioning to an AI-native application architecture.
+  - [ ] Draft an initial MLOps pipeline concept (CI/CD for ML).
+- **Estimated Size**: `L (4-8h / Research Task)`

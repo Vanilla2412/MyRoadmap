@@ -50,16 +50,14 @@ The project adopts a **Semi-Automated** deployment strategy to AWS Amplify.
 
 ## 4. Future Roadmap
 
-### 4.1 Testing Expansion
-As defined in the [Requirements Specification](./requirements.md), the following tests are planned to be integrated into the CI pipeline:
-- **Unit/Integration Tests**: Using **Vitest**.
-- **End-to-End (E2E) Tests**: Using **Playwright** to verify critical user flows (Login, Task CRUD).
+### 4.1 Automated Notifications (Planned)
+Integration with **Slack** is planned to provide real-time status updates.
+- **Details**: See [Issue #63](https://github.com/Vanilla2412/MyRoadmap/issues/63).
+- **Events**: Notifications for CI/CD success and failure.
 
-### 4.2 Automated Notifications
-Implementation of automated notifications for build/deployment status to:
-- **Slack** or **Discord**.
+### 4.2 Testing Expansion
 
-### 4.3 Staging Environments
+### 4.2 Staging Environments
 Currently, the project operates on a single `main` branch. Future iterations may include:
 - Preview deployments for Pull Requests.
 - A dedicated `develop` branch for staging.
