@@ -10,15 +10,25 @@ export default withMermaid(defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Requirements', link: '/requirements' },
-      { text: 'CI/CD', link: '/cicd' }
+      { text: 'CI/CD', link: '/cicd' },
+      { text: 'Operations', link: '/operations_policy' },
+      { text: 'Testing', link: '/test_strategy' }
     ],
     
     sidebar: [
       {
-        text: 'Documentation',
+        text: 'Project Overview',
         items: [
           { text: 'Requirements Specification', link: '/requirements' },
           { text: 'CI/CD Pipeline', link: '/cicd' }
+        ]
+      },
+      {
+        text: 'Operations & Testing',
+        items: [
+          { text: 'Financial Cost Estimation', link: '/financial_cost_estimation' },
+          { text: 'Operations Policy', link: '/operations_policy' },
+          { text: 'Test Strategy', link: '/test_strategy' }
         ]
       }
     ],
