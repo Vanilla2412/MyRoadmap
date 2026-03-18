@@ -64,7 +64,7 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
 
   return (
     <>
-      <div className={`bg-white border rounded-lg p-5 shadow-sm flex flex-col justify-between h-56 transition-all hover:shadow-md ${isDeleting ? 'opacity-50 pointer-events-none' : ''} ${isOverdue ? 'border-red-300 bg-red-50/20' : 'border-gray-200'}`}>
+      <div data-testid="task-card" className={`bg-white border rounded-lg p-5 shadow-sm flex flex-col justify-between h-56 transition-all hover:shadow-md ${isDeleting ? 'opacity-50 pointer-events-none' : ''} ${isOverdue ? 'border-red-300 bg-red-50/20' : 'border-gray-200'}`}>
         <div>
           <div className="flex justify-between items-start mb-2">
             <h3 className="text-lg font-semibold text-gray-900 line-clamp-1" title={task.title}>
