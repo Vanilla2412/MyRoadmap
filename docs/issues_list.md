@@ -104,10 +104,10 @@ These are the 1-2 hour estimation tasks (Size: S) broken down from `memo.md` for
 - **GitHub Issue**: [Closes #63](https://github.com/Vanilla2412/MyRoadmap/issues/63)
 - **Context**: Real-time feedback on build and deployment status is crucial for development efficiency.
 - **Acceptance Criteria**:
-  - [ ] Create a Slack Inbox Webhook.
-  - [ ] Store the Webhook URL in GitHub Secrets as `SLACK_WEBHOOK_URL`.
-  - [ ] Update `ci.yml` and `deploy.yml` to include notification steps.
-  - [ ] Verify that notifications are received in Slack for both success and failure states.
+  - [x] Create a Slack Inbox Webhook.
+  - [x] Store the Webhook URL in GitHub Secrets as `SLACK_WEBHOOK_URL`.
+  - [x] Update `ci.yml` and `deploy.yml` to include notification steps.
+  - [x] Verify that notifications are received in Slack for both success and failure states.
 - **Estimated Size**: `S (1-2h)`
 
 ---
@@ -146,9 +146,9 @@ These are the 1-2 hour estimation tasks (Size: S) broken down from `memo.md` for
 - **GitHub Issue**: [issue #66](https://github.com/Vanilla2412/MyRoadmap/issues/66)
 - **Context**: Operational excellence involves designing for cost-efficiency and reliable maintenance.
 - **Acceptance Criteria**:
-  - [ ] Define budget alerts and cost monitoring strategies.
-  - [ ] Design resource management policies (log retention, cleanup schedules).
-  - [ ] Establish a disaster recovery and automated backup policy.
+  - [x] Define budget alerts and cost monitoring strategies. (Implemented in PR #71)
+  - [x] Design resource management policies (log retention, cleanup schedules).
+  - [x] Establish a disaster recovery and automated backup policy.
 - **Estimated Size**: `S (1-2h)`
 
 ### Issue 13: Phase 4 - AI Integration and MLOps Foundation
