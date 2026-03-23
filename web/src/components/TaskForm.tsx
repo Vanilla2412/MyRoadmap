@@ -36,6 +36,9 @@ export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel, o
       title: defaultValues?.title || '',
       description: defaultValues?.description || '',
       status: defaultValues?.status || 'TODO',
+      priority: defaultValues?.priority || undefined,
+      category: defaultValues?.category || '',
+      dueDate: defaultValues?.dueDate || '',
     },
   });
 
