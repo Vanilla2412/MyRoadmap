@@ -29,9 +29,9 @@ export default function DashboardPage() {
   };
 
   const hasActiveFilters = 
-    filters.filterStatus !== 'ALL' || 
     filters.filterPriority !== 'ALL' || 
-    filters.filterCategory !== '';
+    filters.filterCategory !== '' ||
+    filters.filterTag !== '';
 
   return (
     <div className={cn(

@@ -18,6 +18,8 @@ type TaskFilterBarProps = {
   setFilterPriority: (val: string) => void;
   filterCategory: string;
   setFilterCategory: (val: string) => void;
+  filterTag: string;
+  setFilterTag: (val: string) => void;
   sortBy: SortOption;
   setSortBy: (val: SortOption) => void;
 };
@@ -55,6 +57,7 @@ export function TaskFilterBar({
   filterStatus, setFilterStatus,
   filterPriority, setFilterPriority,
   filterCategory, setFilterCategory,
+  filterTag, setFilterTag,
   sortBy, setSortBy
 }: TaskFilterBarProps) {
   return (
@@ -63,7 +66,7 @@ export function TaskFilterBar({
       "p-4 mb-6", // Spacing
       "flex flex-col md:flex-row items-end gap-4" // Layout
     )}>
-      <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+      <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-4 w-full">
         {/* Status Filter */}
         <FilterSelect
           id="filter-status"
@@ -101,8 +104,21 @@ export function TaskFilterBar({
             placeholder="Search category..." 
             value={filterCategory} 
             onChange={(e) => setFilterCategory(e.target.value)} 
-            aria-label="Search category keyword"
+            aria-label="Search category"
             className="h-10"
+          />
+        </div>
+
+        {/* Tag Search */}
+        <div className="space-y-1.5 text-left">
+          <label htmlFor="filter-tag" className="text-xs font-semibold text-gray-500 uppercase text-indigo-600">Tag</label>
+          <Input 
+            id="filter-tag"
+            placeholder="Search tag..." 
+            value={filterTag} 
+            onChange={(e) => setFilterTag(e.target.value)} 
+            aria-label="Search tag"
+            className="h-10 border-indigo-100 focus:border-indigo-300 focus:ring-indigo-200"
           />
         </div>
       </div>
