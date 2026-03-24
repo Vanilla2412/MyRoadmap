@@ -48,7 +48,7 @@ export function useTaskFilters(tasks: Task[]) {
     }
 
     return result;
-  }, [tasks, filterStatus, filterPriority, filterCategory, sortBy]);
+  }, [tasks, filterStatus, filterPriority, filterCategory, filterTag, sortBy]);
 
   const clearFilters = () => {
     setFilterStatus('ALL');
