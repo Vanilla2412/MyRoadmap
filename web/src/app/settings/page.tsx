@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchUserAttributes, signOut, deleteUser } from "aws-amplify/auth";
+import { logEvent } from "@/lib/rum";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
@@ -56,6 +57,7 @@ export default function SettingsPage() {
   const handleSignOut = async () => {
     try {
       await signOut();
+      logEvent('user_signout');
       router.push("/login");
     } catch (error) {
       toast.error("Failed to sign out");
@@ -67,6 +69,7 @@ export default function SettingsPage() {
     setIsDeleting(true);
     try {
       await deleteUser();
+      logEvent('user_account_deleted');
       toast.success("Account deleted successfully");
       router.push("/login");
     } catch (error) {
