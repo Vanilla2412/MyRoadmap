@@ -62,10 +62,10 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
         priority: input.priority,
         dueDate: input.dueDate,
         category: input.category,
-      }).filter(([_, v]) => v !== undefined)
+      }).filter(([, v]) => v !== undefined)
     );
 
-    const { data: newTask, errors } = await client.models.Task.create(payload as any);
+    const { data: newTask, errors } = await client.models.Task.create(payload as Parameters<typeof client.models.Task.create>[0]);
     
     if (errors || !newTask) {
       console.error('Payload sent:', JSON.stringify(payload, null, 2));
@@ -85,10 +85,10 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
 export async function updateTask(input: UpdateTaskInput): Promise<Task> {
   try {
     const payload = Object.fromEntries(
-      Object.entries(input).filter(([_, v]) => v !== undefined)
+      Object.entries(input).filter(([, v]) => v !== undefined)
     );
 
-    const { data: updatedTask, errors } = await client.models.Task.update(payload as any);
+    const { data: updatedTask, errors } = await client.models.Task.update(payload as Parameters<typeof client.models.Task.update>[0]);
     
     if (errors || !updatedTask) {
       console.error('Payload sent:', JSON.stringify(payload, null, 2));

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { MoreVertical, Edit2, Trash2, Calendar, Tag, AlertCircle } from 'lucide-react';
 import { isPast } from 'date-fns';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 import { Task, UpdateTaskInput } from '../lib/tasks';
-import { TaskStatus, TaskPriority } from '../lib/constants';
+import { TaskStatus } from '../lib/constants';
 import TaskDialog from './TaskDialog';
 import {
   DropdownMenu,
@@ -74,7 +74,7 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
       try {
         await onUpdateStatus(task.id, newStatus);
         toast.success('Status updated');
-      } catch (error) {
+      } catch {
         toast.error('Failed to update status');
       } finally {
         setIsUpdating(false);
@@ -88,7 +88,7 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
       try {
         await onDelete(task.id);
         toast.success('Task deleted');
-      } catch (error) {
+      } catch {
         toast.error('Failed to delete task');
       } finally {
         setIsDeleting(false);
@@ -135,7 +135,7 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
           
           <div className="flex flex-wrap gap-2 mb-3">
             {task.priority && (
-              <span className={badgeVariants({ intent: `priority${task.priority}` as any })}>
+              <span className={badgeVariants({ intent: `priority${task.priority}` as "priorityLOW" | "priorityMEDIUM" | "priorityHIGH" })}>
                 {task.priority}
               </span>
             )}
@@ -177,7 +177,7 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
             <option value="IN_PROGRESS">In Progress</option>
             <option value="DONE">Done</option>
           </select>
-          <span className={badgeVariants({ intent: `status${task.status || 'TODO'}` as any })} aria-hidden="true">
+          <span className={badgeVariants({ intent: `status${task.status || 'TODO'}` as "statusTODO" | "statusIN_PROGRESS" | "statusDONE" })} aria-hidden="true">
             {task.status?.replace('_', ' ')}
           </span>
         </div>
