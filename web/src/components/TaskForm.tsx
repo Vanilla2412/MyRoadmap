@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Plus, Trash2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { taskSchema, TaskFormValues } from '../lib/validations';
@@ -39,6 +40,10 @@ export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel, o
       priority: defaultValues?.priority || undefined,
       category: defaultValues?.category || '',
       dueDate: defaultValues?.dueDate || '',
+      subtasks: defaultValues?.subtasks || [],
+      estimatedHours: defaultValues?.estimatedHours ?? undefined,
+      actualHours: defaultValues?.actualHours ?? undefined,
+      tags: defaultValues?.tags || [],
     },
   });
 
@@ -139,6 +144,50 @@ export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel, o
           )}
         />
 
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="estimatedHours"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Estimated Hours</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    placeholder="0" 
+                    {...field} 
+                    onChange={e => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    value={field.value || ''} 
+                    disabled={isSubmitting} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="actualHours"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Actual Hours</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    placeholder="0" 
+                    {...field} 
+                    onChange={e => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                    value={field.value || ''} 
+                    disabled={isSubmitting} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
           name="dueDate"
@@ -152,6 +201,73 @@ export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel, o
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="tags"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tags (comma separated)</FormLabel>
+              <FormControl>
+                <Input 
+                  placeholder="e.g. urgent, research, home" 
+                  {...field} 
+                  value={field.value?.join(', ') || ''}
+                  onChange={e => field.onChange(e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                  disabled={isSubmitting} 
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="space-y-2">
+          <FormLabel>Subtasks</FormLabel>
+          <div className="space-y-2">
+            {form.watch('subtasks')?.map((_, index) => (
+              <div key={index} className="flex gap-2">
+                <Input
+                  placeholder={`Subtask ${index + 1}`}
+                  value={form.watch(`subtasks.${index}`) || ''}
+                  onChange={(e) => {
+                    const newSubtasks = [...(form.getValues('subtasks') || [])];
+                    newSubtasks[index] = e.target.value;
+                    form.setValue('subtasks', newSubtasks);
+                  }}
+                  disabled={isSubmitting}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    const newSubtasks = [...(form.getValues('subtasks') || [])];
+                    newSubtasks.splice(index, 1);
+                    form.setValue('subtasks', newSubtasks);
+                  }}
+                  disabled={isSubmitting}
+                >
+                  <Trash2 className="h-4 w-4 text-red-500" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => {
+                const current = form.getValues('subtasks') || [];
+                form.setValue('subtasks', [...current, '']);
+              }}
+              disabled={isSubmitting}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Subtask
+            </Button>
+          </div>
+        </div>
         <div className="flex justify-end space-x-2 pt-4">
           <Button variant="outline" type="button" onClick={onCancel} disabled={isSubmitting}>
             Cancel

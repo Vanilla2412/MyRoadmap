@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MoreVertical, Edit2, Trash2, Calendar, Tag, AlertCircle } from 'lucide-react';
+import { MoreVertical, Edit2, Trash2, Calendar, Tag, AlertCircle, CheckCircle2, Timer } from 'lucide-react';
 import { isPast } from 'date-fns';
 import { cva } from 'class-variance-authority';
 import { Task, UpdateTaskInput } from '../lib/tasks';
@@ -155,6 +155,28 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
                 {formattedDate}
                 {isOverdue && <AlertCircle className="w-3 h-3 ml-1" aria-hidden="true" />}
               </span>
+            )}
+            {task.tags?.map((tag) => (
+              <span key={tag} className="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-100 font-medium">
+                #{tag}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-4 mb-3 text-xs text-gray-500">
+            {task.subtasks && task.subtasks.length > 0 && (
+              <div className="flex items-center" title="Subtasks">
+                <CheckCircle2 className="w-3 h-3 mr-1 text-gray-400" />
+                <span>{task.subtasks.length} subtasks</span>
+              </div>
+            )}
+            {(task.estimatedHours || task.actualHours) && (
+              <div className="flex items-center" title="Time tracking (Actual / Estimated)">
+                <Timer className="w-3 h-3 mr-1 text-gray-400" />
+                <span>
+                  {task.actualHours || 0}h / {task.estimatedHours || '?'}h
+                </span>
+              </div>
             )}
           </div>
 
