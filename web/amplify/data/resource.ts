@@ -11,6 +11,10 @@ const schema = a.schema({
       priority: a.enum(["LOW", "MEDIUM", "HIGH"]),
       dueDate: a.date(),
       category: a.string(),
+      subtasks: a.string().array(),
+      estimatedHours: a.float(),
+      actualHours: a.float(),
+      tags: a.string().array(),
     })
     .authorization((allow) => [allow.owner()]),
 });
