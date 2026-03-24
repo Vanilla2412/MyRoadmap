@@ -38,7 +38,7 @@ export async function listTasks(): Promise<Task[]> {
   try {
     const { data: tasks, errors } = await client.models.Task.list();
     if (errors) {
-      console.error('Errors fetching tasks:', errors);
+      console.error('Errors fetching tasks:', JSON.stringify(errors, null, 2));
       throw new Error('Failed to fetch tasks');
     }
     return tasks;
@@ -53,17 +53,23 @@ export async function listTasks(): Promise<Task[]> {
  */
 export async function createTask(input: CreateTaskInput): Promise<Task> {
   try {
-    const { data: newTask, errors } = await client.models.Task.create({
-      title: input.title,
-      description: input.description,
-      status: input.status || 'TODO',
-      priority: input.priority,
-      dueDate: input.dueDate,
-      category: input.category,
-    });
+    // AppSync GraphQL client crashes if explicitly given `undefined`. Strip them out.
+    const payload = Object.fromEntries(
+      Object.entries({
+        title: input.title,
+        description: input.description,
+        status: input.status || 'TODO',
+        priority: input.priority,
+        dueDate: input.dueDate,
+        category: input.category,
+      }).filter(([, v]) => v !== undefined)
+    );
+
+    const { data: newTask, errors } = await client.models.Task.create(payload as Parameters<typeof client.models.Task.create>[0]);
     
     if (errors || !newTask) {
-      console.error('Errors creating task:', errors);
+      console.error('Payload sent:', JSON.stringify(payload, null, 2));
+      console.error('Errors creating task:', JSON.stringify(errors, null, 2));
       throw new Error('Failed to create task');
     }
     return newTask;
@@ -78,10 +84,15 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
  */
 export async function updateTask(input: UpdateTaskInput): Promise<Task> {
   try {
-    const { data: updatedTask, errors } = await client.models.Task.update(input);
+    const payload = Object.fromEntries(
+      Object.entries(input).filter(([, v]) => v !== undefined)
+    );
+
+    const { data: updatedTask, errors } = await client.models.Task.update(payload as Parameters<typeof client.models.Task.update>[0]);
     
     if (errors || !updatedTask) {
-      console.error('Errors updating task:', errors);
+      console.error('Payload sent:', JSON.stringify(payload, null, 2));
+      console.error('Errors updating task:', JSON.stringify(errors, null, 2));
       throw new Error('Failed to update task');
     }
     return updatedTask;
@@ -99,7 +110,7 @@ export async function deleteTask(id: string): Promise<void> {
     const { errors } = await client.models.Task.delete({ id });
     
     if (errors) {
-      console.error('Errors deleting task:', errors);
+      console.error('Errors deleting task:', JSON.stringify(errors, null, 2));
       throw new Error('Failed to delete task');
     }
   } catch (error) {

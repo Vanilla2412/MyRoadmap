@@ -5,11 +5,11 @@ import TaskCard from './TaskCard';
 
 // --- Mocks ---
 
-// Mock EditTaskModal to isolate TaskCard's behavior.
-// This ensures TaskCard tests remain stable even if EditTaskModal's internals change.
-vi.mock('./EditTaskModal', () => ({
+// Mock TaskDialog to isolate TaskCard's behavior.
+// This ensures TaskCard tests remain stable even if TaskDialog's internals change.
+vi.mock('./TaskDialog', () => ({
   default: ({ isOpen }: { isOpen: boolean }) =>
-    isOpen ? <div data-testid="edit-modal">Edit Modal</div> : null,
+    isOpen ? <div data-testid="task-dialog">Task Dialog</div> : null,
 }));
 
 // Mock the DropdownMenu and related UI primitives.
@@ -197,16 +197,16 @@ describe('TaskCard', () => {
     });
   });
 
-  describe('Edit Modal', () => {
-    it('should show the edit modal when user clicks the Edit button', async () => {
+  describe('Task Dialog', () => {
+    it('should show the task dialog when user clicks the Edit button', async () => {
       const user = userEvent.setup();
       render(<TaskCard task={createMockTask()} {...getProps()} />);
 
-      expect(screen.queryByTestId('edit-modal')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('task-dialog')).not.toBeInTheDocument();
 
       await user.click(screen.getByRole('button', { name: /edit/i }));
 
-      expect(screen.getByTestId('edit-modal')).toBeInTheDocument();
+      expect(screen.getByTestId('task-dialog')).toBeInTheDocument();
     });
   });
 });
