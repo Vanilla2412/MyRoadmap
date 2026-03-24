@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { fetchUserAttributes, signOut, deleteUser } from "aws-amplify/auth";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,8 +26,12 @@ export default function SettingsPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isAgreed, setIsAgreed] = useState(false);
+  const [isTelemetryEnabled, setIsTelemetryEnabled] = useState(true);
 
   useEffect(() => {
+    // Load telemetry preference
+    const savedPreference = localStorage.getItem("telemetry-opt-out");
+    setIsTelemetryEnabled(savedPreference !== "true");
     const loadUser = async () => {
       try {
         const attrs = await fetchUserAttributes();
@@ -39,6 +44,12 @@ export default function SettingsPage() {
     };
     loadUser();
   }, []);
+
+  const handleTelemetryChange = (enabled: boolean) => {
+    setIsTelemetryEnabled(enabled);
+    localStorage.setItem("telemetry-opt-out", (!enabled).toString());
+    toast.success(enabled ? "Analytics enabled" : "Analytics disabled");
+  };
 
   const [isLoadingUser, setIsLoadingUser] = useState(true);
 
@@ -103,7 +114,18 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-100">
+            <div className="mt-8 pt-6 border-t border-gray-100 space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <h3 className="text-sm font-semibold text-gray-900">Analytics & Telemetry</h3>
+                  <p className="text-xs text-gray-500">Help us improve the app by sharing anonymous usage data.</p>
+                </div>
+                <Switch 
+                  checked={isTelemetryEnabled}
+                  onCheckedChange={handleTelemetryChange}
+                />
+              </div>
+
               <Button variant="outline" onClick={handleSignOut} className="text-gray-700">
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign Out
