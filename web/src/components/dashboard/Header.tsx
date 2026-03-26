@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { signOut, fetchUserAttributes } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
+import { Settings, LogOut } from "lucide-react";
+import Link from "next/link";
 
 export default function Header() {
   const router = useRouter();
@@ -47,11 +49,19 @@ export default function Header() {
                 {userEmail}
               </span>
             ) : null}
+            <Link
+              href="/settings"
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 border border-gray-200 bg-white hover:bg-gray-50 h-9 w-9"
+              title="Settings"
+            >
+              <Settings className="h-4 w-4 text-gray-600" />
+            </Link>
             <button
               onClick={handleSignOut}
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-100 hover:text-gray-900 h-9 px-4 py-2"
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 border border-gray-300 bg-white hover:bg-gray-100 h-9 px-4 py-2 text-gray-700"
             >
-              Sign Out
+              <LogOut className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
         </div>

@@ -6,6 +6,7 @@ export function useTaskFilters(tasks: Task[]) {
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
   const [filterPriority, setFilterPriority] = useState<string>('ALL');
   const [filterCategory, setFilterCategory] = useState<string>('');
+  const [filterTag, setFilterTag] = useState<string>('');
   const [sortBy, setSortBy] = useState<SortOption>('none');
 
   const filteredAndSortedTasks = useMemo(() => {
@@ -20,6 +21,12 @@ export function useTaskFilters(tasks: Task[]) {
     if (filterCategory.trim() !== '') {
       const searchLower = filterCategory.toLowerCase();
       result = result.filter(task => task.category?.toLowerCase().includes(searchLower));
+    }
+    if (filterTag.trim() !== '') {
+      const searchLower = filterTag.toLowerCase();
+      result = result.filter(task => 
+        task.tags?.some(tag => tag?.toLowerCase().includes(searchLower))
+      );
     }
 
     if (sortBy !== 'none') {
@@ -41,12 +48,13 @@ export function useTaskFilters(tasks: Task[]) {
     }
 
     return result;
-  }, [tasks, filterStatus, filterPriority, filterCategory, sortBy]);
+  }, [tasks, filterStatus, filterPriority, filterCategory, filterTag, sortBy]);
 
   const clearFilters = () => {
     setFilterStatus('ALL');
     setFilterPriority('ALL');
     setFilterCategory('');
+    setFilterTag('');
   };
 
   return {
@@ -54,6 +62,7 @@ export function useTaskFilters(tasks: Task[]) {
     filterStatus, setFilterStatus,
     filterPriority, setFilterPriority,
     filterCategory, setFilterCategory,
+    filterTag, setFilterTag,
     sortBy, setSortBy,
     clearFilters
   };

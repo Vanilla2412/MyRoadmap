@@ -15,6 +15,10 @@ export type CreateTaskInput = {
   priority?: 'LOW' | 'MEDIUM' | 'HIGH';
   dueDate?: string;
   category?: string;
+  subtasks?: string[];
+  estimatedHours?: number;
+  actualHours?: number;
+  tags?: string[];
 };
 
 // Require ID for updates, other fields optional
@@ -26,6 +30,10 @@ export type UpdateTaskInput = {
   priority?: 'LOW' | 'MEDIUM' | 'HIGH';
   dueDate?: string;
   category?: string;
+  subtasks?: string[];
+  estimatedHours?: number;
+  actualHours?: number;
+  tags?: string[];
 };
 
 // --- CRUD Operations ---
@@ -62,6 +70,10 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
         priority: input.priority,
         dueDate: input.dueDate,
         category: input.category,
+        subtasks: input.subtasks,
+        estimatedHours: input.estimatedHours,
+        actualHours: input.actualHours,
+        tags: input.tags,
       }).filter(([, v]) => v !== undefined)
     );
 
