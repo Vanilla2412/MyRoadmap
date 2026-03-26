@@ -3,6 +3,7 @@ import { MoreVertical, Edit2, Trash2, Calendar, Tag, AlertCircle, CheckCircle2, 
 import { isPast } from 'date-fns';
 import { cva } from 'class-variance-authority';
 import { Task, UpdateTaskInput } from '../lib/tasks';
+import { cn } from '../lib/utils';
 import { TaskStatus } from '../lib/constants';
 import TaskDialog from './TaskDialog';
 import {
@@ -115,7 +116,11 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
             </h3>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="-mr-2 h-8 w-8 focus-visible:ring-0">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className={cn("-mr-2 h-8 w-8 focus-visible:ring-0")}
+                >
                   <span className="sr-only">Open task menu</span>
                   <MoreVertical className="h-4 w-4 text-gray-500" aria-hidden="true" />
                 </Button>
@@ -140,7 +145,9 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
               </span>
             )}
             {task.category && (
-              <span className="text-xs text-gray-500 flex items-center bg-gray-50 px-2 py-0.5 rounded border border-gray-100">
+              <span className={cn(
+                "flex items-center rounded border border-gray-100 bg-gray-50 px-2 py-0.5 text-xs text-gray-500"
+              )}>
                 <Tag className="w-3 h-3 mr-1" aria-hidden="true" />
                 {task.category}
               </span>
@@ -192,7 +199,11 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: Tas
             value={task.status || 'TODO'}
             onChange={handleStatusChange}
             disabled={isUpdating}
-            className="text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50 text-gray-700 py-1.5 pl-3 pr-8 w-36 disabled:opacity-50"
+            className={cn(
+              "w-36 rounded-md border-gray-300 bg-gray-50 py-1.5 pl-3 pr-8 text-sm text-gray-700 shadow-sm transition-colors",
+              "focus:border-indigo-500 focus:ring-indigo-500",
+              "disabled:opacity-50"
+            )}
             aria-label="Update task status"
           >
             <option value="TODO">To Do</option>

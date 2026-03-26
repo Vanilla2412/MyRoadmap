@@ -37,7 +37,13 @@ type FilterSelectProps = {
 function FilterSelect({ id, label, icon, value, onValueChange, placeholder, children }: FilterSelectProps) {
   return (
     <div className="space-y-1.5 text-left">
-      <label htmlFor={id} className="text-xs font-semibold text-gray-500 uppercase flex items-center">
+      <label 
+        htmlFor={id} 
+        className={cn(
+          "text-xs font-semibold uppercase text-gray-500",
+          "flex items-center"
+        )}
+      >
         {icon && <span className="mr-1" aria-hidden="true">{icon}</span>}
         {label}
       </label>
@@ -118,7 +124,10 @@ export function TaskFilterBar({
             value={filterTag} 
             onChange={(e) => setFilterTag(e.target.value)} 
             aria-label="Search tag"
-            className="h-10 border-indigo-100 focus:border-indigo-300 focus:ring-indigo-200"
+            className={cn(
+              "h-10 border-indigo-100",
+              "focus:border-indigo-300 focus:ring-indigo-200"
+            )}
           />
         </div>
       </div>

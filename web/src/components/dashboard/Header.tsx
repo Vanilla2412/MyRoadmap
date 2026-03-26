@@ -5,6 +5,7 @@ import { signOut, fetchUserAttributes } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { Settings, LogOut } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function Header() {
   const router = useRouter();
@@ -51,14 +52,20 @@ export default function Header() {
             ) : null}
             <Link
               href="/settings"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 border border-gray-200 bg-white hover:bg-gray-50 h-9 w-9"
+              className={cn(
+                "inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-sm font-medium transition-colors hover:bg-gray-50",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              )}
               title="Settings"
             >
               <Settings className="h-4 w-4 text-gray-600" />
             </Link>
             <button
               onClick={handleSignOut}
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 border border-gray-300 bg-white hover:bg-gray-100 h-9 px-4 py-2 text-gray-700"
+              className={cn(
+                "inline-flex h-9 items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+              )}
             >
               <LogOut className="mr-2 h-4 w-4" />
               <span className="hidden sm:inline">Sign Out</span>

@@ -1,5 +1,6 @@
 import { generateClient } from 'aws-amplify/data';
 import type { Schema } from '../../amplify/data/resource';
+import { logEvent } from './rum';
 
 // Generate a typed client for the Amplify Data API
 const client = generateClient<Schema>();
@@ -84,6 +85,12 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
       console.error('Errors creating task:', JSON.stringify(errors, null, 2));
       throw new Error('Failed to create task');
     }
+
+    logEvent('task_created', { 
+      priority: newTask.priority || 'MEDIUM',
+      category: newTask.category || 'none'
+    });
+
     return newTask;
   } catch (error) {
     console.error('Error in createTask:', error);
@@ -107,6 +114,11 @@ export async function updateTask(input: UpdateTaskInput): Promise<Task> {
       console.error('Errors updating task:', JSON.stringify(errors, null, 2));
       throw new Error('Failed to update task');
     }
+
+    logEvent('task_updated', { 
+      status: updatedTask.status || 'TODO'
+    });
+
     return updatedTask;
   } catch (error) {
     console.error('Error in updateTask:', error);
@@ -125,6 +137,8 @@ export async function deleteTask(id: string): Promise<void> {
       console.error('Errors deleting task:', JSON.stringify(errors, null, 2));
       throw new Error('Failed to delete task');
     }
+
+    logEvent('task_deleted');
   } catch (error) {
     console.error('Error in deleteTask:', error);
     throw error;
