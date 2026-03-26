@@ -5,6 +5,7 @@ import "@aws-amplify/ui-react/styles.css";
 import { Hub } from "aws-amplify/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 /**
  * Inner component that reads search params and handles redirect after login.
@@ -35,7 +36,9 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-[100dvh] items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
+    <div className={cn(
+      "flex min-h-[100dvh] items-center justify-center p-4 bg-gray-50 dark:bg-gray-900"
+    )}>
       <div className="w-full max-w-md">
         {/* Suspense is required by Next.js when using useSearchParams() */}
         <Suspense fallback={null}>

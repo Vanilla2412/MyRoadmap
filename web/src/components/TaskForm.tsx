@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from './ui/form';
+import { cn } from '../lib/utils';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import {
@@ -72,7 +73,12 @@ export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel, o
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <textarea
-                  className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  className={cn(
+                    "flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors",
+                    "placeholder:text-muted-foreground",
+                    "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+                    "disabled:cursor-not-allowed disabled:opacity-50"
+                  )}
                   placeholder="Add more details..."
                   {...field}
                   value={field.value || ''}
@@ -226,7 +232,7 @@ export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel, o
           <FormLabel>Subtasks</FormLabel>
           <div className="space-y-2">
             {form.watch('subtasks')?.map((_, index) => (
-              <div key={index} className="flex gap-2">
+              <div key={index} className={cn("flex gap-2")}>
                 <Input
                   placeholder={`Subtask ${index + 1}`}
                   value={form.watch(`subtasks.${index}`) || ''}
@@ -241,6 +247,7 @@ export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel, o
                   type="button"
                   variant="ghost"
                   size="icon"
+                  className={cn("shrink-0")}
                   onClick={() => {
                     const newSubtasks = [...(form.getValues('subtasks') || [])];
                     newSubtasks.splice(index, 1);

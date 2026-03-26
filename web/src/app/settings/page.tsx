@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchUserAttributes, signOut, deleteUser } from "aws-amplify/auth";
 import { logEvent } from "@/lib/rum";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
@@ -80,10 +81,10 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className={cn("min-h-screen bg-gray-50 flex flex-col")}>
       <Header />
       
-      <main className="flex-1 max-w-3xl mx-auto w-full px-4 pt-8 pb-12">
+      <main className={cn("flex-1 max-w-3xl mx-auto w-full px-4 pt-8 pb-12")}>
         <Button 
           variant="ghost" 
           onClick={() => router.push("/dashboard")} 
@@ -137,7 +138,9 @@ export default function SettingsPage() {
           </section>
 
           {/* Danger Zone Section */}
-          <section className="bg-white p-6 rounded-lg border border-red-200 shadow-sm overflow-hidden relative">
+          <section className={cn(
+            "bg-white p-6 rounded-lg border border-red-200 shadow-sm overflow-hidden relative"
+          )}>
             <div className="absolute top-0 left-0 w-1 h-full bg-red-500" />
             <div className="flex items-center gap-4 mb-6">
               <div className="h-12 w-12 rounded-full bg-red-50 flex items-center justify-center text-red-600">

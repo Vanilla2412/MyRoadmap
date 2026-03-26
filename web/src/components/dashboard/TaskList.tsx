@@ -3,6 +3,7 @@ import { Task, UpdateTaskInput } from '@/lib/tasks';
 import TaskCard from '@/components/TaskCard';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type TaskListProps = {
   tasks: Task[];
@@ -17,9 +18,15 @@ type TaskListProps = {
 
 function TaskSkeleton() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-label="Loading tasks">
+    <div 
+      className={cn("grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3")} 
+      aria-label="Loading tasks"
+    >
       {[1, 2, 3].map((i) => (
-        <div key={i} className="bg-white border border-gray-200 rounded-lg p-5 shadow-sm animate-pulse flex flex-col justify-between h-56">
+        <div key={i} className={cn(
+          "bg-white border border-gray-200 rounded-lg p-5 shadow-sm animate-pulse",
+          "flex flex-col justify-between h-56"
+        )}>
           <div>
             <div className="h-5 bg-gray-200 rounded-md w-3/4 mb-4"></div>
             <div className="h-4 bg-gray-200 rounded-md w-full mb-2"></div>
@@ -43,7 +50,9 @@ function EmptyTaskList({
   onOpenCreateModal: () => void;
 }) {
   return (
-    <div className="text-center py-16 bg-white border border-gray-200 border-dashed rounded-lg bg-gray-50/50">
+    <div className={cn(
+      "text-center py-16 bg-white border border-gray-200 border-dashed rounded-lg bg-gray-50/50"
+    )}>
       <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" role="img">
         <path vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
       </svg>
@@ -83,7 +92,7 @@ export function TaskList({
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className={cn("grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3")}>
       {tasks.map(task => (
         <TaskCard
           key={task.id}
