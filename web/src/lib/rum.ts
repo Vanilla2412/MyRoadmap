@@ -22,22 +22,23 @@ export const initRum = () => {
   if (rum) return rum;
 
   try {
+    const APPLICATION_ID = process.env.NEXT_PUBLIC_RUM_APPLICATION_ID || "";
+    const APPLICATION_VERSION = "1.0.0";
+    const APPLICATION_REGION = process.env.NEXT_PUBLIC_RUM_REGION || "";
+
     const config: AwsRumConfig = {
       sessionSampleRate: parseFloat(process.env.NEXT_PUBLIC_RUM_SAMPLE_RATE || "1"),
-      guestRoleArn: process.env.NEXT_PUBLIC_RUM_GUEST_ROLE_ARN,
-      identityPoolId: process.env.NEXT_PUBLIC_RUM_IDENTITY_POOL_ID,
-      endpoint: `https://dataplane.rum.${process.env.NEXT_PUBLIC_RUM_REGION}.amazonaws.com`,
+      // Note: guestRoleArn is omitted as it caused STS client errors (TypeError: split)
+      // and is not strictly required when using identityPoolId.
+      identityPoolId: process.env.NEXT_PUBLIC_RUM_IDENTITY_POOL_ID || undefined,
+      endpoint: `https://dataplane.rum.${APPLICATION_REGION}.amazonaws.com`,
       telemetries: [TelemetryEnum.Errors, TelemetryEnum.Performance, TelemetryEnum.Http],
       allowCookies: true,
       enableXRay: true,
     };
 
-    const APPLICATION_ID = process.env.NEXT_PUBLIC_RUM_APPLICATION_ID || "";
-    const APPLICATION_VERSION = "1.0.0";
-    const APPLICATION_REGION = process.env.NEXT_PUBLIC_RUM_REGION || "";
-
-    if (!APPLICATION_ID || !APPLICATION_REGION) {
-      console.warn("RUM configuration missing. Skipping initialization.");
+    if (!APPLICATION_ID || !APPLICATION_REGION || !config.identityPoolId) {
+      console.warn("CloudWatch RUM configuration incomplete. Skipping initialization.");
       return null;
     }
 
