@@ -9,7 +9,8 @@
     "seccomp=unconfined"
   ],
   "features": {
-    "ghcr.io/devcontainers/features/aws-cli:1": {}
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
   },
   "customizations": {
     "vscode": {
@@ -18,8 +19,22 @@
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss",
         "amazonwebservices.aws-toolkit-vscode",
-        "ms-vscode.vscode-typescript-next"
-      ]
+        "ms-vscode.vscode-typescript-next",
+        "vitest.explorer-vitest",
+        "christian-kohler.path-intellisense"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "vitest.explorer.enable": true,
+        "tailwindCSS.includeLanguages": {
+          "typescript": "javascript",
+          "typescriptreact": "javascript"
+        }
+      }
     }
   },
   "forwardPorts": [
