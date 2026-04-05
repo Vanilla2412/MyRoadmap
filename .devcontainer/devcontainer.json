@@ -1,0 +1,33 @@
+{
+  "name": "My Roadmap Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "runArgs": [
+    "--cap-add=SYS_ADMIN",
+    "--cap-add=SYS_PTRACE"
+  ],
+  "securityOpt": [
+    "seccomp=unconfined"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "amazonwebservices.aws-toolkit-vscode",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  },
+  "forwardPorts": [
+    3000,
+    5173
+  ],
+  "updateRemoteUserUID": false,
+  "containerUser": "node",
+  "remoteUser": "node",
+  "postCreateCommand": "npm install && if [ -d \"web\" ]; then cd web && npm install; fi"
+}

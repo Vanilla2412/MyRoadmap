@@ -43,5 +43,12 @@ export default withMermaid(defineConfig({
       message: 'Built with Next.js, AWS Amplify Gen 2, and VitePress',
       copyright: 'Copyright © 2026 Vanilla2412'
     }
+  },
+  
+  vite: {
+    server: {
+      host: true,
+      port: 5173
+    }
   }
 }))
