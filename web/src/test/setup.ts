@@ -16,7 +16,7 @@ global.ResizeObserver = ResizeObserverMock;
 // Mock window.matchMedia which is often used for responsive UI or theme detection.
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,

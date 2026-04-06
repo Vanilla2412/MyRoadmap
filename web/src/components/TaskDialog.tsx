@@ -14,8 +14,7 @@ type TaskDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   task?: Task; // If provided, acts as Edit Modal. Otherwise, Create Modal.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSave: (input: any) => Promise<any>;
+  onSave: (input: CreateTaskInput | UpdateTaskInput) => Promise<Task>;
 };
 
 export default function TaskDialog({ isOpen, onClose, task, onSave }: TaskDialogProps) {

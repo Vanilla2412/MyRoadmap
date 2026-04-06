@@ -4,33 +4,59 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TaskForm } from './TaskForm';
 
+// --- Types ---
+
+interface SelectContextValue {
+  onValueChange: (value: string) => void;
+  defaultValue?: string;
+  children: React.ReactNode;
+}
+
+interface SelectProps {
+  children: React.ReactNode;
+  onValueChange: (value: string) => void;
+  defaultValue?: string;
+}
+
+interface SelectTriggerProps {
+  id?: string;
+  children: React.ReactNode;
+}
+
 // --- Mocks ---
 
-const SelectContext = React.createContext<any>(null);
+// Use vi.hoisted to ensure SelectContext is available before vi.mock
+const { SelectContext } = vi.hoisted(() => ({
+  SelectContext: React.createContext<SelectContextValue | null>(null),
+}));
 
 vi.mock('./ui/select', () => {
   return {
-    Select: ({ children, onValueChange, defaultValue }: any) => {
+    Select: ({ children, onValueChange, defaultValue }: SelectProps) => {
       return (
         <SelectContext.Provider value={{ onValueChange, defaultValue, children }}>
           <div data-testid="select-mock-container">{children}</div>
         </SelectContext.Provider>
       );
     },
-    SelectTrigger: ({ id, children }: any) => {
+    SelectTrigger: ({ id, children }: SelectTriggerProps) => {
       const ctx = React.useContext(SelectContext);
       if (!ctx) return null;
       const { onValueChange, defaultValue, children: selectChildren } = ctx;
       
-      const findOptions = (nodes: any): any[] => {
-        return React.Children.toArray(nodes).reduce((acc: any[], child: any) => {
+      const findOptions = (nodes: React.ReactNode): React.ReactElement[] => {
+        return React.Children.toArray(nodes).reduce((acc: React.ReactElement[], child: React.ReactNode) => {
           if (!child || typeof child !== 'object') return acc;
-          if (child.props && child.props.value !== undefined && child.props.children !== undefined) {
-            // Likely a SelectItem
-            return [...acc, <option key={child.props.value} value={child.props.value}>{child.props.children}</option>];
-          }
-          if (child.props && child.props.children) {
-            return [...acc, ...findOptions(child.props.children)];
+          
+          if ('props' in child) {
+            const element = child as React.ReactElement<{ value?: string; children?: React.ReactNode }>;
+            if (element.props.value !== undefined && element.props.children !== undefined) {
+              // Likely a SelectItem
+              return [...acc, <option key={element.props.value} value={element.props.value}>{element.props.children}</option>];
+            }
+            if (element.props.children) {
+              return [...acc, ...findOptions(element.props.children)];
+            }
           }
           return acc;
         }, []);
@@ -47,7 +73,7 @@ vi.mock('./ui/select', () => {
         </select>
       );
     },
-    SelectValue: ({ placeholder }: any) => <option value="" disabled>{placeholder}</option>,
+    SelectValue: ({ placeholder }: { placeholder?: string }) => <option value="" disabled>{placeholder}</option>,
     SelectContent: () => null,
     SelectItem: () => null,
   };

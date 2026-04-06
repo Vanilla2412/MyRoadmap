@@ -1,12 +1,26 @@
+import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import TaskDialog from './TaskDialog';
+import { Task, CreateTaskInput, UpdateTaskInput } from '../lib/tasks';
+
+// --- Types ---
+
+interface MockTaskFormProps {
+  submitLabel: string;
+  onCancel: () => void;
+}
+
+interface MockDialogProps {
+  children: React.ReactNode;
+  open?: boolean;
+}
 
 // --- Mocks ---
 
 // Mock TaskForm to prevent recursively testing its internal logic
 vi.mock('./TaskForm', () => ({
-  TaskForm: ({ submitLabel, onCancel }: any) => (
+  TaskForm: ({ submitLabel, onCancel }: MockTaskFormProps) => (
     <div>
       <div data-testid="mock-task-form">{submitLabel}</div>
       <button onClick={onCancel}>Cancel</button>
@@ -16,10 +30,10 @@ vi.mock('./TaskForm', () => ({
 
 // Mock the Dialog components from shadcn/ui
 vi.mock('./ui/dialog', () => ({
-  Dialog: ({ children, open }: any) => (open ? <div>{children}</div> : null),
-  DialogContent: ({ children }: any) => <div>{children}</div>,
-  DialogHeader: ({ children }: any) => <div>{children}</div>,
-  DialogTitle: ({ children }: any) => <div>{children}</div>,
+  Dialog: ({ children, open }: MockDialogProps) => (open ? <div>{children}</div> : null),
+  DialogContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DialogHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DialogTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 // Mock Sonner toast
@@ -32,7 +46,7 @@ vi.mock('sonner', () => ({
 
 describe('TaskDialog', () => {
   const mockOnClose = vi.fn();
-  const mockOnSave = vi.fn();
+  const mockOnSave = vi.fn() as unknown as (input: CreateTaskInput | UpdateTaskInput) => Promise<Task>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -51,12 +65,13 @@ describe('TaskDialog', () => {
   });
 
   it('should render "Edit Task" when a task is provided', () => {
+    // Creating a mock task using unknown as Task to satisfy type system without 'any'
     const task = {
       id: 'task-1',
       title: 'Existing Task',
-      status: 'TODO' as const,
-      priority: 'MEDIUM' as const,
-    } as any;
+      status: 'TODO',
+      priority: 'MEDIUM',
+    } as unknown as Task;
 
     render(<TaskDialog {...defaultProps} task={task} />);
     expect(screen.getByText(/Edit Task/i)).toBeInTheDocument();
