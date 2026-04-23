@@ -32,8 +32,9 @@ export function useTasks() {
   const update = async (input: UpdateTaskInput) => {
     mutate(current => current ? current.map(t => t.id === input.id ? { ...t, ...input } : t) : [], false);
     try {
-      await updateTask(input);
+      const result = await updateTask(input);
       mutate();
+      return result;
     } catch (err) {
       mutate(); // rollback
       throw err;

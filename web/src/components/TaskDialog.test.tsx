@@ -52,14 +52,13 @@ describe('TaskDialog', () => {
     vi.clearAllMocks();
   });
 
-  const defaultProps = {
+  const baseProps = {
     isOpen: true,
     onClose: mockOnClose,
-    onSave: mockOnSave,
   };
 
   it('should render "Create New Task" when no task is provided', () => {
-    render(<TaskDialog {...defaultProps} />);
+    render(<TaskDialog {...baseProps} onSave={mockOnSave} />);
     expect(screen.getByText(/Create New Task/i)).toBeInTheDocument();
     expect(screen.getByTestId('mock-task-form')).toHaveTextContent('Create Task');
   });
@@ -73,19 +72,19 @@ describe('TaskDialog', () => {
       priority: 'MEDIUM',
     } as unknown as Task;
 
-    render(<TaskDialog {...defaultProps} task={task} />);
+    render(<TaskDialog {...baseProps} task={task} onSave={mockOnSave} />);
     expect(screen.getByText(/Edit Task/i)).toBeInTheDocument();
     expect(screen.getByTestId('mock-task-form')).toHaveTextContent('Save Changes');
   });
 
   it('should handle cancel by calling onClose', () => {
-    render(<TaskDialog {...defaultProps} />);
+    render(<TaskDialog {...baseProps} onSave={mockOnSave} />);
     screen.getByRole('button', { name: /cancel/i }).click();
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it('should not render anything when isOpen is false', () => {
-    const { container } = render(<TaskDialog {...defaultProps} isOpen={false} />);
+    const { container } = render(<TaskDialog {...baseProps} isOpen={false} onSave={mockOnSave} />);
     expect(container.firstChild).toBeNull();
   });
 });

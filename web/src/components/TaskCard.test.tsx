@@ -72,7 +72,7 @@ describe('TaskCard', () => {
   // This is the idiomatic v4 pattern: mock is still a vi.fn() spy, but typed for prop compatibility.
   let onUpdateStatus: (id: string, newStatus: 'TODO' | 'IN_PROGRESS' | 'DONE') => Promise<void>;
   let onDelete: (id: string) => Promise<void>;
-  let onEdit: (input: import('../lib/tasks').UpdateTaskInput) => Promise<void>;
+  let onEdit: (input: import('../lib/tasks').UpdateTaskInput) => Promise<import('../lib/tasks').Task>;
 
   beforeEach(() => {
     // clearAllMocks: resets call history and return values of vi.fn() mocks

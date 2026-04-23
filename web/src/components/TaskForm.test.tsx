@@ -25,12 +25,10 @@ interface SelectTriggerProps {
 
 // --- Mocks ---
 
-// Use vi.hoisted to ensure SelectContext is available before vi.mock
-const { SelectContext } = vi.hoisted(() => ({
-  SelectContext: React.createContext<SelectContextValue | null>(null),
-}));
+vi.mock('./ui/select', async () => {
+  const React = await import('react');
+  const SelectContext = React.createContext<SelectContextValue | null>(null);
 
-vi.mock('./ui/select', () => {
   return {
     Select: ({ children, onValueChange, defaultValue }: SelectProps) => {
       return (
