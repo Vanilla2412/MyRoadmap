@@ -98,33 +98,59 @@
    cd MyRoadmap
    ```
 
-2. **依存関係のインストール**
+2. **ルート依存関係のインストール（ドキュメント用）**
 
    ```bash
    npm install
    ```
 
-3. **ドキュメントサイトの起動（VitePress）**
+3. **アプリケーション本体の依存関係のインストール**
+
    ```bash
-   npm run docs:dev
+   cd web
+   npm install
    ```
-   ドキュメントは `http://localhost:5173` で閲覧できます
 
 ### アプリケーションの実行
+
+ローカル環境で AWS Amplify Sandbox と共に実行する場合：
+
+```bash
+# プロジェクトルートから
+cd web
+
+# 1. Amplify Sandbox の起動（AWSアカウントの設定が必要）
+npx ampx sandbox
+
+# 2. Next.js 開発サーバーの起動（別ターミナルで実行）
+npm run dev
+```
+
+### テストの実行
+
+```bash
+# プロジェクトルートから全てのテストを実行
+npm test
+
+# または web アプリケーションのみ
+cd web && npm test
+```
 
 ## 📁 プロジェクト構造
 
 ```
 MyRoadmap/
-├── docs/                      # VitePressドキュメント
-│   ├── .vitepress/           # VitePress設定
-│   ├── requirements.md       # 包括的な要件仕様書
-│   └── index.md              # ドキュメントホームページ
-├── .gitignore                # Git除外パターン
-├── package.json              # プロジェクト依存関係とスクリプト
+├── web/                       # Next.js アプリケーション（メイン）
+│   ├── src/components/       # UI コンポーネント & テスト
+│   ├── src/app/              # Next.js App Router ページ
+│   └── package.json          # アプリ固有の依存関係
+├── docs/                      # VitePress ドキュメント
+│   ├── .vitepress/           # VitePress 設定
+│   └── requirements.md       # 要件定義書
+├── package.json              # ルート依存関係（ドキュメント・ツール用）
 ├── README.md                 # 英語版 README
 ├── README.ja.md              # このファイル（日本語版）
-└── LICENSE                   # MIT License
+└── ampx.toml                 # Amplify 設定
 ```
 
 ---

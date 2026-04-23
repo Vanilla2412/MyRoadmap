@@ -75,6 +75,10 @@ describe('Dashboard Integration: Task Creation', () => {
         priority: undefined,
         category: undefined,
         dueDate: undefined,
+        subtasks: [],
+        estimatedHours: undefined,
+        actualHours: undefined,
+        tags: [],
       });
     });
 

@@ -12,7 +12,7 @@ type TaskListProps = {
   onOpenCreateModal: () => void;
   onUpdateStatus: (id: string, newStatus: 'TODO' | 'IN_PROGRESS' | 'DONE') => Promise<void>;
   onDelete: (id: string) => Promise<void>;
-  onEdit: (input: UpdateTaskInput) => Promise<void>;
+  onEdit: (input: UpdateTaskInput) => Promise<Task>;
 };
 
 function TaskSkeleton() {
