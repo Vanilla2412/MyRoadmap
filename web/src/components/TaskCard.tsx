@@ -58,7 +58,7 @@ type TaskCardProps = {
   task: Task;
   onUpdateStatus: (id: string, newStatus: TaskStatus) => Promise<void>;
   onDelete: (id: string) => Promise<void>;
-  onEdit: (input: UpdateTaskInput) => Promise<void>;
+  onEdit: (input: UpdateTaskInput) => Promise<Task>;
 };
 
 export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }: TaskCardProps) {

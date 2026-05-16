@@ -13,14 +13,15 @@ import { toast } from 'sonner';
 type TaskDialogProps = {
   isOpen: boolean;
   onClose: () => void;
-  task?: Task; // If provided, acts as Edit Modal. Otherwise, Create Modal.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSave: (input: any) => Promise<any>;
-};
+} & (
+  | { task?: undefined; onSave: (input: CreateTaskInput) => Promise<Task>; }
+  | { task: Task; onSave: (input: UpdateTaskInput) => Promise<Task>; }
+);
 
-export default function TaskDialog({ isOpen, onClose, task, onSave }: TaskDialogProps) {
+export default function TaskDialog(props: TaskDialogProps) {
+  const { isOpen, onClose } = props;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isEditing = !!task;
+  const isEditing = !!props.task;
 
   const handleSubmit = async (values: TaskFormValues) => {
     setIsSubmitting(true);
@@ -32,13 +33,17 @@ export default function TaskDialog({ isOpen, onClose, task, onSave }: TaskDialog
         priority: values.priority,
         category: values.category?.trim() || undefined,
         dueDate: values.dueDate || undefined,
+        subtasks: values.subtasks,
+        estimatedHours: values.estimatedHours,
+        actualHours: values.actualHours,
+        tags: values.tags,
       };
 
-      if (isEditing) {
-        await onSave({ ...payload, id: task.id } as UpdateTaskInput);
+      if (props.task) {
+        await props.onSave({ ...payload, id: props.task.id });
         toast.success('Task updated successfully');
       } else {
-        await onSave(payload as CreateTaskInput);
+        await props.onSave(payload as CreateTaskInput);
         toast.success('Task created successfully');
       }
       onClose();
@@ -56,13 +61,17 @@ export default function TaskDialog({ isOpen, onClose, task, onSave }: TaskDialog
           <DialogTitle>{isEditing ? 'Edit Task' : 'Create New Task'}</DialogTitle>
         </DialogHeader>
         <TaskForm
-          defaultValues={task ? {
-            title: task.title,
-            description: task.description || '',
-            status: task.status || 'TODO',
-            priority: task.priority || 'LOW',
-            category: task.category || '',
-            dueDate: task.dueDate || '',
+          defaultValues={props.task ? {
+            title: props.task.title,
+            description: props.task.description || '',
+            status: props.task.status || 'TODO',
+            priority: props.task.priority || 'LOW',
+            category: props.task.category || '',
+            dueDate: props.task.dueDate || '',
+            subtasks: (props.task.subtasks || []).filter((s): s is string => s !== null),
+            estimatedHours: props.task.estimatedHours ?? undefined,
+            actualHours: props.task.actualHours ?? undefined,
+            tags: (props.task.tags || []).filter((t): t is string => t !== null),
           } : undefined}
           onSubmit={handleSubmit}
           isSubmitting={isSubmitting}

@@ -92,29 +92,42 @@ This project demonstrates:
    cd MyRoadmap
    ```
 
-2. **Install dependencies**
+2. **Install Root dependencies (Documentation context)**
 
    ```bash
    npm install
    ```
 
-3. **Run documentation site (VitePress)**
+3. **Install Web Application dependencies**
+
    ```bash
-   npm run docs:dev
+   cd web
+   npm install
    ```
-   The documentation will be available at `http://localhost:5173`
 
 ### Running the Application
 
+To run the application locally with AWS Amplify sandbox:
+
 ```bash
-# Install dependencies
-npm install
+# From the project root
+cd web
 
-# Run development server
+# 1. Start Amplify sandbox (requires AWS account setup)
+npx ampx sandbox
+
+# 2. Start Next.js development server (in another terminal)
 npm run dev
+```
 
-# Build for production
-npm run build
+### Running Tests
+
+```bash
+# Run all tests from the project root
+npm test
+
+# Or specifically for the web app
+cd web && npm test
 ```
 
 ---
@@ -123,15 +136,17 @@ npm run build
 
 ```
 MyRoadmap/
+├── web/                       # Next.js Application (Main App)
+│   ├── src/components/       # UI Components & Tests
+│   ├── src/app/              # Next.js App Router pages
+│   └── package.json          # App-specific dependencies
 ├── docs/                      # VitePress documentation
 │   ├── .vitepress/           # VitePress configuration
-│   ├── requirements.md       # Comprehensive requirements specification
-│   └── index.md              # Documentation homepage
-├── .gitignore                # Git ignore patterns
-├── package.json              # Project dependencies and scripts
+│   └── requirements.md       # Requirements specification
+├── package.json              # Root dependencies (Docs & Tooling)
 ├── README.md                 # This file (English)
 ├── README.ja.md              # Japanese README
-└── LICENSE                   # MIT License
+└── ampx.toml                 # Amplify configuration
 ```
 
 ---
