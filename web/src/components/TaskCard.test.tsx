@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { axe } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
 import TaskCard from './TaskCard';
 
@@ -207,6 +208,14 @@ describe('TaskCard', () => {
       await user.click(screen.getByRole('button', { name: /edit/i }));
 
       expect(screen.getByTestId('task-dialog')).toBeInTheDocument();
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('should have no accessibility violations', async () => {
+      const { container } = render(<TaskCard task={createMockTask()} {...getProps()} />);
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
     });
   });
 });
