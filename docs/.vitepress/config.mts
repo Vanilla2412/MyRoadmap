@@ -10,6 +10,7 @@ export default withMermaid(defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Requirements', link: '/requirements' },
+      { text: 'Showcase', link: '/showcase' },
       { text: 'CI/CD', link: '/cicd' },
       { text: 'AI Development', link: '/ai_development_guidelines' },
       { text: 'Operations', link: '/operations_policy' },
@@ -21,6 +22,7 @@ export default withMermaid(defineConfig({
         text: 'Project Overview',
         items: [
           { text: 'Requirements Specification', link: '/requirements' },
+          { text: 'Application Showcase', link: '/showcase' },
           { text: 'CI/CD Pipeline', link: '/cicd' },
           { text: 'AI Development Guidelines', link: '/ai_development_guidelines' }
         ]

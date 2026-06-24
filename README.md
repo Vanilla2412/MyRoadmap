@@ -155,6 +155,7 @@ MyRoadmap/
 
 Comprehensive project documentation is available via VitePress:
 
+- **Application Showcase**: Visual walkthrough of the current UI/UX and features with interactive zoom. See [`docs/showcase.md`](./docs/showcase.md)
 - **Requirements Specification**: See [`docs/requirements.md`](./docs/requirements.md)
 - **System Architecture**: Detailed diagrams and data flow
 - **API Design**: GraphQL schema and resolver specifications

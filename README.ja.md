@@ -159,6 +159,7 @@ MyRoadmap/
 
 VitePressによる包括的なプロジェクトドキュメントが利用可能です：
 
+- **成果物ギャラリー (Application Showcase)**: 画面のスクリーンショット（タップによるズーム対応）を含んだ、現時点の機能およびUI/UXの紹介。[`docs/showcase.md`](./docs/showcase.md) を参照
 - **要件仕様書**: [`docs/requirements.md`](./docs/requirements.md) を参照
 - **システムアーキテクチャ**: 詳細な図とデータフロー
 - **API設計**: GraphQLスキーマとリゾルバー仕様

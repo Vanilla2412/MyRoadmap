@@ -1,0 +1,11 @@
+/* Custom styling to resolve overlay issues with medium-zoom and VitePress layout */
+
+/* Ensure the zoom backdrop overlay sits above the VitePress header navigation and sidebar */
+.medium-zoom-overlay {
+  z-index: 100 !important;
+}
+
+/* Ensure the zoomed image itself is positioned on top of the overlay */
+.medium-zoom-image--opened {
+  z-index: 101 !important;
+}
