@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { axe } from 'jest-axe';
 import userEvent from '@testing-library/user-event';
 import { TaskForm } from './TaskForm';
 
@@ -164,6 +165,14 @@ describe('TaskForm', () => {
 
       await user.click(screen.getByRole('button', { name: /cancel/i }));
       expect(mockOnCancel).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('should have no accessibility violations', async () => {
+      const { container } = render(<TaskForm {...defaultProps} />);
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
     });
   });
 });

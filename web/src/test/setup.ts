@@ -1,5 +1,8 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { toHaveNoViolations } from 'jest-axe';
+import { vi, expect } from 'vitest';
+
+expect.extend(toHaveNoViolations);
 
 // --- Global Mocks for UI Tests ---
 
