@@ -43,3 +43,17 @@ amplify-backup/
 coverage/
 .nyc_output/
 *.test.js.snap
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.env
+.env.local
+.pytest_cache/
+.mypy_cache/
