@@ -2,6 +2,10 @@
 
 An overview of the current user interface, user experience flows, and core features implemented in the **My Roadmap** application.
 
+🎥 **[Demo Video (AI Agent Integrated)](https://youtu.be/CB09PKJzTkc)**
+
+[![Demo Video](https://img.youtube.com/vi/CB09PKJzTkc/0.jpg)](https://youtu.be/CB09PKJzTkc)
+
 ---
 
 ## 1. Authentication Flow
