@@ -6,6 +6,7 @@
 
 📖 **[オンラインドキュメント（LIVE）](https://vanilla2412.github.io/MyRoadmap/)**
 迫力あるMermaid図解や詳細な要件定義書を確認できます。
+🎥 **[demo](https://youtu.be/CB09PKJzTkc)**
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Next.js](https://img.shields.io/badge/Next.js-15+-black)](https://nextjs.org/)
