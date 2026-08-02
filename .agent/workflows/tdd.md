@@ -1,74 +1,54 @@
 ---
-description: Enforce test-driven development workflow. Scaffold interfaces, generate tests FIRST, then implement minimal code to pass. Ensure 80%+ coverage.
+description: Enforce Test-Driven Development (TDD) workflow. Scaffold interfaces, write failing tests FIRST, implement minimal code to pass, and verify 80%+ coverage.
 ---
 
-This workflow invokes the **tdd-guide** skill to enforce test-driven development methodology on My Roadmap.
+# Test-Driven Development Workflow (`/tdd`)
 
-## What This Workflow Does
-1. **Scaffold Interfaces** - Define types/interfaces first
-2. **Generate Tests First** - Write failing tests (RED)
-3. **Implement Minimal Code** - Write just enough to pass (GREEN)
-4. **Refactor** - Improve code while keeping tests green (REFACTOR)
-5. **Verify Coverage** - Ensure 80%+ test coverage
+Enforces Test-Driven Development (TDD) methodology. This workflow delegates test execution to [Harness Engineering](./harness-engineering.md) and uses abstract commands from [project-config.md](../shared/project-config.md).
 
-## When to Use
-Use `/tdd` when:
-- Implementing new features
-- Adding new functions/components
-- Fixing bugs (write test that reproduces bug first)
-- Refactoring existing code
-- Building critical business logic
+---
 
-## How It Works
-The tdd-guide skill will:
+## 🛡️ Guardrails & Safety Rules (STRICTLY ENFORCED)
 
-1. **Define interfaces** for inputs/outputs
-2. **Write tests that will FAIL** (because code doesn't exist yet)
-3. **Run tests** and verify they fail for the right reason (`cd web && npx vitest run`)
-4. **Write minimal implementation** to make tests pass
-5. **Run tests** and verify they pass (`cd web && npx vitest run`)
-6. **Refactor** code while keeping tests green
-7. **Check coverage** (`cd web && npx vitest run --coverage`) and add more tests if below 80%
+> [!CAUTION]
+> **NEVER skip the RED phase**. Implementation code written before tests fail will be rejected.
 
-## TDD Cycle
-```
-RED → GREEN → REFACTOR → REPEAT
+> [!CAUTION]
+> **Circuit Breaker**: If a test fails to pass after **3 consecutive implementation attempts**, HALT execution, revert to last checkpoint (`git checkout -- .`), and request human intervention.
 
-RED:      Write a failing test
-GREEN:    Write minimal code to pass
-REFACTOR: Improve code, keep tests passing
-REPEAT:   Next feature/scenario
+> [!IMPORTANT]
+> **Branch Gate**: Ensure you are on a dedicated feature branch (`feat/*`, `fix/*`) before writing code or tests.
+
+---
+
+## TDD Cycle Phases
+
+```mermaid
+graph LR
+    RED["1. RED: Write Failing Test"] --> VerifyFail["Verify Test FAILS"]
+    VerifyFail --> GREEN["2. GREEN: Minimal Code"]
+    GREEN --> VerifyPass["Verify Test PASSES"]
+    VerifyPass --> REFACTOR["3. REFACTOR: Clean Code"]
+    REFACTOR --> CoverageCheck["Verify Coverage >= 80%"]
 ```
 
-## TDD Best Practices
-**DO:**
-- PASS: Write the test FIRST, before any implementation
-- PASS: Run tests and verify they FAIL before implementing
-- PASS: Write minimal code to make tests pass
-- PASS: Refactor only after tests are green
-- PASS: Add edge cases and error scenarios
-- PASS: Aim for 80%+ coverage (100% for authentication logic)
+---
 
-**DON'T:**
-- FAIL: Write implementation before tests
-- FAIL: Skip running tests after each change
-- FAIL: Write too much code at once
-- FAIL: Ignore failing tests
-- FAIL: Test implementation details (test behavior)
+## Execution Steps
 
-## Coverage Requirements
-- **80% minimum** for all code
-- **100% required** for:
-  - Financial calculations
-  - Authentication logic
-  - Security-critical code
-  - Core business logic
+1. **Scaffold Interfaces / Types**: Define TypeScript input/output contracts.
+2. **Write Failing Test (RED)**: Write unit/integration test describing expected behavior.
+3. **Verify Failure**: Run test command (`{{TEST_COMMAND}}` -> `cd web && npx vitest run`) and verify it **FAILS**.
+4. **Minimal Implementation (GREEN)**: Write ONLY enough production code to make the test pass.
+5. **Verify Pass**: Run `{{TEST_COMMAND}}` and verify it **PASSES**.
+6. **Refactor**: Clean code, improve names, ensure immutability while keeping tests green.
+7. **Verify Coverage**: Run `{{TEST_COVERAGE_COMMAND}}` (`cd web && npx vitest run --coverage`).
+   - Standard code: **80%+ minimum coverage**.
+   - Authentication / Security logic: **100% required coverage**.
 
-## Important Notes
-**MANDATORY**: Tests must be written BEFORE implementation. The TDD cycle is:
+---
 
-1. **RED** - Write failing test
-2. **GREEN** - Implement to pass
-3. **REFACTOR** - Improve code
+## Coverage Requirements & Thresholds
 
-Never skip the RED phase. Never write code before tests.
+- Standard components/utilities: `{{COVERAGE_THRESHOLD}}`% (`80%`) minimum.
+- Authentication & security logic: `{{CRITICAL_COVERAGE_THRESHOLD}}`% (`100%`) required.
