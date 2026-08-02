@@ -5,6 +5,7 @@ export default withMermaid(defineConfig({
   title: 'My Roadmap',
   description: 'Learning Task Management Application - Professional portfolio project',
   base: '/MyRoadmap/',
+  ignoreDeadLinks: true,
   
   themeConfig: {
     nav: [

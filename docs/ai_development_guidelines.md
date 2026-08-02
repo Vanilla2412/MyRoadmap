@@ -8,10 +8,10 @@ This document outlines the rules of engagement and best practices for developing
 
 AI assistants are powerful but prone to over-engineering or hallucinating complex solutions when given overly broad prompts. We mitigate this through **strict control and verification**.
 
-### 1.1 Small Chunking (Granular Issues)
+### 1.1 Small Chunking (Granular Micro-Tasks)
 - **Rule**: Never ask the AI to build an entire feature (e.g., "Build the dashboard") in a single prompt.
-- **Action**: Break down features into explicit, atomic GitHub Issues (S size, 1-2 hours).
-- **Execution**: Instruct the AI to focus *only* on the current Issue. One Pull Request (PR) must equal one specific objective.
+- **Action**: Break down features into explicit, atomic micro-tasks (Size **XS** `< 1h` or **S** `1-2h`).
+- **Execution**: Instruct the AI to focus *only* on the current micro-task. One Pull Request (PR) must equal one specific objective.
 
 ### 1.2 Test-Driven AI (TDAI)
 - **Rule**: Define the expected behavior before writing the implementation.
@@ -58,6 +58,45 @@ The quality of AI output is directly proportional to the context provided.
 AI code can become disjointed over multiple sessions.
 - **Rule**: Refactor early and often.
 - **Action**: After completing a major feature, dedicate a session solely to cleaning up the code, extracting reusable components (shadcn/ui), and consolidating duplicated logic. Do not add new features during a refactoring session.
+
+---
+
+## 5. Autonomous AI Engineering System & Loop Architecture
+
+To support systematic, agent-first execution, the repository implements a modular **AI Engineering Operating System** comprising 7 composable workflow modules located under `.agent/workflows/`.
+
+```mermaid
+graph TD
+    PE["1. Prompt Engineering"] --> CE["2. Context Engineering"]
+    CE --> PL["3. Planning Engineering"]
+    PL --> LE["4. Loop Engineering"]
+    LE <--> HE["Harness Engineering (Vitest / TSC)"]
+    LE --> VE["5. Verification Engineering"]
+    VE --> PRE["6. PR Engineering"]
+```
+
+### 5.1 The Autonomous Loop Execution Framework (`/loop-engineering`)
+
+The core execution engine operates autonomously in iterative, step-by-step micro-task cycles:
+
+1. **Phase 1: Task Queue & Scope Pre-Check**:
+   - Decomposes goals into XS/S micro-tasks via **Planning Engineering**.
+   - Checks destructive operations: Actions requiring major directory deletion or DB resets trigger a mandatory **Approval Hook**.
+2. **Phase 2: Iterative TDD Loop (RED → GREEN → REFACTOR)**:
+   - **RED**: Writes failing unit/component tests in Vitest.
+   - **GREEN**: Implements minimal production code to pass the test.
+   - **REFACTOR**: Cleans code and verifies zero regression via **Harness Engineering**.
+3. **Phase 3: Dual Circuit Breaker & Safety Policies**:
+   - **Task-Level Limit**: Maximum **3 consecutive retries** for the same error on a single micro-task.
+   - **Cumulative Loop Limit**: Maximum **5 cumulative retries** across an entire loop session.
+   - **Circuit Breaker Action**: Exceeding retry limits halts execution immediately, reverts to the last git checkpoint (`git checkout -- .`), and alerts the human developer.
+4. **Phase 4: Token & Cost Guardrails**:
+   - **Micro-Task Scope Limit**: Maximum **3 files modified** and **< 200 lines changed** per task.
+   - **Run Execution Limit**: Maximum **5 micro-tasks** per single loop invocation.
+   - **Targeted Context Refresh**: Context Engineering re-reads only modified files to conserve token budget.
+5. **Phase 5: Quality Gate & Handover**:
+   - **Verification Engineering** audits code for zero security defects, path sanitization (relative paths only), and 80%+ test coverage.
+   - **PR Engineering** formats Conventional Commit summaries, collates test evidence, and opens a Pull Request (`gh pr create`).
 
 ---
 
