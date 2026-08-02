@@ -33,8 +33,8 @@ The project adopts a **Semi-Automated** deployment strategy to AWS Amplify.
 ### Workflow: `Amplify Deploy` (`.github/workflows/deploy.yml`)
 
 #### A. Scheduled Deployment
-- **Schedule**: Every Sunday at 23:00 JST (`0 14 * * 0` UTC).
-- **Purpose**: To provide a regular "Weekly Release" without manual intervention.
+- **Schedule**: 1st of every month at 23:00 JST (`0 14 1 * *` UTC).
+- **Purpose**: To provide a regular "Monthly Release" without manual intervention.
 
 #### B. Manual Deployment
 - **Trigger**: `workflow_dispatch` (Manual trigger from GitHub UI).
