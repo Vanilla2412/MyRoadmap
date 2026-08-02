@@ -2,7 +2,7 @@ name: Amplify Deploy
 
 on:
   schedule:
-    - cron: "0 14 * * 0" # Weekly on Sundays at 23:00 JST (14:00 UTC)
+    - cron: "0 14 1 * *" # Monthly on the 1st at 23:00 JST (14:00 UTC)
   workflow_dispatch:
     inputs:
       reason:
@@ -34,7 +34,7 @@ jobs:
       - name: Generate Execution Report
         run: |
           echo "## 🚀 Amplify Deployment Report (Scheduled)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Triggered by**: Scheduled (Sunday 23:00 JST)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by**: Scheduled (Monthly 1st 23:00 JST)" >> $GITHUB_STEP_SUMMARY
           echo "- **App ID**: \`${AMPLIFY_APP_ID}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Branch**: \`main\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Status**: Job started successfully" >> $GITHUB_STEP_SUMMARY
