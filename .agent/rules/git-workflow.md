@@ -24,6 +24,7 @@ When creating PRs:
 4. Execute PR creation via `/create-pr` workflow
 
 > [!CAUTION]
+> NEVER modify files directly on the `main` branch. Always create a feature branch (`git checkout -b feat/...`) before making any edits.
 > NEVER push directly to `main`. Always create a feature branch and PR.
 
 ## Pre-PR Checklist
