@@ -1,3 +1,74 @@
+<script setup>
+import { useLanguage } from './.vitepress/theme/composables/useLanguage'
+
+const { currentLang } = useLanguage()
+</script>
+
+<div v-if="currentLang === 'ja'" class="lang-content ja-content">
+
+# AWS コスト設計および運用ポリシー (AWS Cost & Operations Policy)
+
+本ポリシーは、「My Roadmap」における AWS 運用コストの管理手順、リソースのクリーン状態保持（ハイジーン）、および事業継続性（DR/バックアップ）に関する運用指針を定めるものです。
+
+## 1. AWS 予算アラート (AWS Budget Alerts)
+
+予期せぬ請求を防ぐため、バックエンドの AWS CDK 経由で予算アラートが事前設定されています。
+
+| アラート名 | しきい値 (USD) | 判定基準タイプ | 状態 |
+| :--- | :--- | :--- | :--- |
+| **月間予算 (Monthly Budget)** | $5.00 | 実績 (100%) | **自動化 (CDK)** |
+| **予測アラート (Forecasted Alert)** | $5.00 | 予測 (100%) | **自動化 (CDK)** |
+
+### 設定構造 (自動化)
+アラートは `web/amplify/backend.ts` 内で `aws-cdk-lib/aws-budgets` を使用して定義されています。
+
+### 通知宛先 Eメールの設定手順
+通知用 Eメールアドレスは環境変数 **`BUDGET_NOTIFICATION_EMAIL`** から取得されます。
+
+**設定手順:**
+1. **AWS Amplify Console** にログイン。
+2. 対象アプリを選択 -> **App settings (アプリ設定)** -> **Environment variables (環境変数)**。
+3. **Manage variables (変数の管理)** をクリックし、以下を追加：
+   - 変数名: `BUDGET_NOTIFICATION_EMAIL`
+   - 値: `your-email@example.com`
+4. アプリケーションを再デプロイして変更を適用。
+
+---
+
+## 2. コストモニタリング戦略
+
+- **月次レビュー**: 毎月最初の月曜日に AWS Cost Explorer の月次レポートを確認。
+- **異常検知**: AppSync クエリ量や DynamoDB の読み書きキャパシティにおける異様なスパイクの有無を確認。
+- **リソースタグ付け**: コスト配分を追跡するため、すべてのプロジェクトリソースに `Project: MyRoadmap` タグを付与。
+
+## 3. リソース管理とクリーンネス (Hygiene)
+
+### CloudWatch ログ
+- **保持ポリシー**: Amplify/Lambda によって作成された全ロググループの保持期間を **14日** に設定。
+- **理由**: 標準ログはトラブルシューティングのみに必要なため、長期保存による不要なコストをカット。
+
+### データベース運用
+- **DynamoDB バックアップ**: 本番環境の `Task` テーブルに対して **Points-in-Time Recovery (PITR)** を有効化。
+- **クリーンアップ**: 未使用の S3 バケットや Amplify の検証用プレビューブランチを定期的に点検・削除。
+
+## 4. 障害復旧 (DR) およびバックアップ戦略
+
+| コンポーネント | 復旧戦略 | 目標復旧時点 (RPO) |
+| :--- | :--- | :--- |
+| **フロントエンド** | コードベース復旧 (GitHub Actions 再デプロイ) | < 1時間 |
+| **バックエンド API** | IaC 復旧 (Amplify Gen 2 / CDK) | < 1時間 |
+| **データベース** | DynamoDB PITR (継続的バックアップ) | 1秒 |
+
+### 復旧手順 (Disaster Recovery Procedure)
+リージョン障害または誤削除が発生した場合：
+1. `npx ampx pipeline-deploy` (または GitHub Actions) 経由でバックエンドを再デプロイ。
+2. AWS Console の Point-in-Time バックアップから最新の DynamoDB テーブルを復元。
+3. エンドポイント URL が変更された場合、フロントエンドの `amplify_outputs.json` を更新。
+
+</div>
+
+<div v-if="currentLang === 'en'" class="lang-content en-content">
+
 # AWS Cost Design and Operations Policy
 
 This policy outlines the procedures and configurations for managing AWS costs, resource hygiene, and business continuity for "My Roadmap".
@@ -55,3 +126,6 @@ In case of regional failure or accidental deletion:
 1. Re-deploy the backend using `npx ampx pipeline-deploy` (or via GitHub Actions).
 2. Restore the DynamoDB table from the latest Point-in-Time backup in the AWS Console.
 3. Update the `amplify_outputs.json` in the frontend if endpoint URLs change.
+
+</div>
+

@@ -1,3 +1,48 @@
+<script setup>
+import { useLanguage } from './.vitepress/theme/composables/useLanguage'
+
+const { currentLang } = useLanguage()
+</script>
+
+<div v-if="currentLang === 'ja'" class="lang-content ja-content">
+
+# AWS Amplify ホスティングおよびベーシック認証セットアップ手順 (AWS Amplify Hosting Setup)
+
+本ガイドは、Next.js フロントエンドおよび Amplify Gen 2 バックエンドを AWS Amplify ホスティング経由でデプロイし、ベーシック認証（Basic Authentication）で保護する手順をまとめたものです。
+
+## 1. AWS Amplify へのリポジトリ接続
+
+1. AWS マネジメントコンソールにログインし、**AWS Amplify** に移動します。
+2. **新しいアプリを作成 (Create new app)** または **アプリをデプロイ** をクリック。
+3. **GitHub** を選択し、AWS Amplify にリポジトリへのアクセス権限を授与します。
+4. 対象リポジトリ (`anti00`) および対象ブランチ (`main`) を選択。
+5. ビルド設定にて、Amplify がルートディレクトリにある `amplify.yml` を自動検出することを確認。
+6. フロントエンドと共にバックエンドリソースをデプロイするオプションを選択し、適切な IAM サービスロールを割り当てます。
+7. **保存してデプロイ** をクリックし、ビルド・デプロイの完了を待ちます。
+
+## 2. ベーシック認証 (アクセス制御) の設定
+
+開発段階での一般公開を防ぐため、アクセス制御を有効化します。
+
+1. AWS Amplify Console にて作成したアプリを開きます。
+2. 左サイドバーから **ホスティング (Hosting)** > **アクセス制御 (Access control)** をクリック。
+3. **アクセス管理 (Manage access)** をクリック。
+4. アクセス設定を「一般公開 (Publicly viewable)」から **「アクセス制限 (Restrict access)」** に変更。
+5. 認証用の **ユーザー名 (Username)** と **パスワード (Password)** を入力。
+6. **保存 (Save)** をクリック。
+
+## 3. 動作検証 (Verification)
+
+1. 設定保存後、発行されたライブ URL (`https://main.xxxxxx.amplifyapp.com`) にアクセス。
+2. ブラウザがユーザー名とパスワードの入力を求めてくることを確認。
+3. 設定した資格情報を入力し、ログイン後に以下を確認：
+   - タスクダッシュボードが正常にロードされること。
+   - Cognito による認証および AppSync/Amplify Data API 経由のデータ取得が正常に動作すること。
+
+</div>
+
+<div v-if="currentLang === 'en'" class="lang-content en-content">
+
 # AWS Amplify Hosting & Basic Authentication Setup
 
 This guide details how to deploy the Next.js frontend and Amplify Gen 2 backend via AWS Amplify Hosting and secure it using Basic Authentication. This fulfills the requirements of Issue #35.
@@ -33,3 +78,6 @@ To prevent unauthorized public access to the MVP during development, you must en
    - The Task Dashboard loads correctly.
    - Protected Next.js routes operate as expected.
    - You can log in with Cognito and fetch data through the AppSync/Amplify Data API.
+
+</div>
+

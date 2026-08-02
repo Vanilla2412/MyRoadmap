@@ -1,3 +1,201 @@
+<script setup>
+import { useLanguage } from './.vitepress/theme/composables/useLanguage'
+
+const { currentLang } = useLanguage()
+</script>
+
+<div v-if="currentLang === 'ja'" class="lang-content ja-content">
+
+# 要件定義書: My Roadmap
+
+## 1. プロジェクト概要
+
+**プロジェクト名:** My Roadmap  
+**目的:** ユーザーが自身の学習タスクを体系的に追跡・管理・整理するための学習タスク管理アプリケーション。
+
+**ターゲットユーザー:**
+
+- 自己主導型の学習目標を管理する個人ユーザー
+- スキル開発のために構造化されたタスク管理を必要とするユーザー
+
+---
+
+## 2. コア機能 (Phase 1 - MVP)
+
+### 2.1 学習タスク管理
+
+本アプリケーションの主要機能は、以下の必須属性を持つ学習タスクを管理することです：
+
+#### タスク属性仕様
+
+| 属性名 (Property) | データ型 | 必須 | 概要説明 |
+| :--- | :--- | :--- | :--- |
+| **タイトル (Title)** | String | はい | 学習タスクの名称 (例: "Next.js App Router の習得") |
+| **ステータス (Status)** | Enum | はい | タスクの進捗状態: `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED` |
+| **優先度 (Priority)** | Enum | はい | 優先度レベル: `HIGH`, `MEDIUM`, `LOW` |
+| **期限 (Due Date)** | Date | はい | 完了目標日 |
+| **カテゴリ (Category)** | String | はい | 学習領域 (例: "フロントエンド", "バックエンド", "インフラ", "アルゴリズム") |
+
+#### ステータス定義
+
+- **NOT_STARTED**: タスクは作成されたが、まだ着手されていない状態
+- **IN_PROGRESS**: ユーザーが現在アクティブに取り組んでいる状態
+- **COMPLETED**: タスクが正常に完了した状態
+
+---
+
+## 3. 機能要件 (Functional Requirements)
+
+### 3.1 タスクの CRUD 操作
+
+- **FR-1.1**: ユーザーはすべての必須属性を指定して新しい学習タスクを作成できること。
+- **FR-1.2**: ユーザーはすべての学習タスク一覧を閲覧できること。
+- **FR-1.3**: ユーザーは既存タスクの任意の属性を更新できること。
+- **FR-1.4**: ユーザーは学習タスクを削除できること。
+- **FR-1.5**: ユーザーはタスクのステータスを変更できること (未着手 → 進行中 → 完了)。
+
+### 3.2 タスクのフィルタリングおよびソート
+
+- **FR-2.1**: ユーザーはステータス別にタスクをフィルタリングできること。
+- **FR-2.2**: ユーザーは優先度別にタスクをフィルタリングできること。
+- **FR-2.3**: ユーザーはカテゴリ別にタスクをフィルタリングできること。
+- **FR-2.4**: ユーザーは期限日順にタスクをソートできること。
+- **FR-2.5**: ユーザーは優先度順にタスクをソートできること。
+
+### 3.3 タスクの視覚的表示
+
+- **FR-3.1**: ユーザーにタスクのステータスが視覚的にわかりやすく表示されること。
+- **FR-3.2**: ユーザーに優先度インジケーター (カラーコード等) が表示されること。
+- **FR-3.3**: ユーザーに期日が近いタスクが強調表示されること。
+
+---
+
+## 4. 非機能要件 (Non-Functional Requirements)
+
+### 4.1 パフォーマンス要件
+
+- **NFR-1.1**: タスク一覧は 2 秒以内にロードされること。
+- **NFR-1.2**: タスクの CRUD 操作は 1 秒以内に完了すること。
+
+### 4.2 ユーザビリティ要件
+
+- **NFR-2.1**: UI はレスポンシブであり、デスクトップおよびモバイル端末で正常に動作すること。
+- **NFR-2.2**: UI はモダンなデザイン原則 (クリーン、直感的) に従うこと。
+- **NFR-2.3**: アクセシビリティに配慮されていること (WCAG 2.1 Level AA 準拠)。
+
+### 4.3 セキュリティ要件
+
+#### 4.3.1 認証・アイデンティティ管理
+
+- **NFR-3.1.1**: ユーザーは Eメール検証付きの AWS Cognito 経由で認証すること。
+- **NFR-3.1.2**: パスワードは以下の最小複雑性要件を満たすこと：
+  - 8 文字以上
+  - 英大文字 1 文字以上
+  - 英小文字 1 文字以上
+  - 数字 1 文字以上
+  - 記号 1 文字以上
+- **NFR-3.1.3**: JWT トークンは 1 時間の非アクティブで期限切れとなること。
+- **NFR-3.1.4**: リフレッシュトークンは httpOnly クッキーを使用して安全に保存されること。
+- **NFR-3.1.5**: ログイン失敗試行にはレート制限を設けること (15 分あたり最大 5 回)。
+
+#### 4.3.2 認可およびアクセス制御
+
+- **NFR-3.2.1**: ユーザーは自身のタスクにのみアクセスできること (`userId` による行レベルセキュリティの強制)。
+- **NFR-3.2.2**: すべての GraphQL ミューテーションは変更を許可する前にユーザーの所有権を検証すること。
+- **NFR-3.2.3**: AppSync リゾルバーはフィールドレベルで認可ルールを強制すること。
+- **NFR-3.2.4**: 有効な JWT トークンのない API リクエストは 401 Unauthorized を返すこと。
+- **NFR-3.2.5**: 未承認のリソースにアクセスしようとする API リクエストは 403 Forbidden を返すこと。
+
+#### 4.3.3 データ保護
+
+- **NFR-3.3.1**: 通信中のすべてのデータは TLS 1.2 以上で暗号化されること。
+- **NFR-3.3.2**: DynamoDB の保存データは AWS マネージドキーで暗号化されること。
+- **NFR-3.3.3**: 機密性の高いユーザーデータ (メールアドレス) はプレーンテキストでログに記録されないこと。
+
+#### 4.3.4 入力検証および API セキュリティ
+
+- **NFR-3.4.1**: すべてのユーザー入力はクライアント側・サーバー側の両方で検証・サニタイズされること。
+- **NFR-3.4.2**: GraphQL クエリの最大深度は 5 に制限されること。
+- **NFR-3.4.3**: API レート制限はユーザーあたり毎分 100 リクエストに設定されること。
+
+#### 4.3.5 セキュリティモニタリングおよびログ
+
+- **NFR-3.5.1**: 認証失敗の試行は CloudWatch にログ記録されること。
+- **NFR-3.5.2**: 不審なアクティビティは CloudWatch アラームをトリガーすること。
+- **NFR-3.5.3**: アクセスログは 90 日間保持されること。
+
+---
+
+## 5. クラウドアーキテクチャ要件 (AWS Amplify Gen 2)
+
+- **ARCH-1.1**: インフラストラクチャは TypeScript コード (AWS Amplify Gen 2 IaC) として定義・管理されること。
+- **ARCH-1.2**: バックエンドリソース (Cognito, DynamoDB, AppSync) は Amplify sandbox 環境でローカル検証可能であること。
+- **ARCH-1.3**: GitHub Actions CI/CD パイプライン経由で AWS Amplify ホスティング環境へ自動デプロイされること。
+
+---
+
+## 6. データモデル (Phase 1)
+
+### タスクエンティティ (Task Entity)
+
+```typescript
+interface Task {
+  id: string; // 一意識別子 (UUID)
+  userId: string; // タスク所有者ID (Cognitoより)
+  title: string; // タスク名
+  status: "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
+  priority: "HIGH" | "MEDIUM" | "LOW";
+  dueDate: string; // ISO 8601 日付フォーマット
+  category: string; // 学習領域
+  createdAt: string; // 作成日時
+  updatedAt: string; // 更新日時
+}
+```
+
+### DynamoDB テーブル設計
+
+- **テーブル名**: `Tasks`
+- **パーティションキー**: `userId` (String)
+- **ソートキー**: `id` (String)
+- **GSI (グローバルセカンダリインデックス)**:
+  - `StatusIndex`: パーティションキー = `userId`, ソートキー = `status`
+  - `DueDateIndex`: パーティションキー = `userId`, ソートキー = `dueDate`
+
+---
+
+## 7. ユーザーストーリー (User Stories)
+
+- **US-1**: 学習者として、学習したい内容を追跡できるように新しいタスクを作成したい。
+- **US-2**: 学習者として、ロードマップを一目で確認できるようにすべてのタスクを一覧で閲覧したい。
+- **US-3**: 学習者として、現在集中しているタスクがわかるように作業開始時にステータスを「進行中」に変更したい。
+- **US-4**: 学習者として、達成感を得るために完了したタスクを「完了」としてマークしたい。
+- **US-5**: 学習者として、重要なアイテムから着手できるように各タスクに優先度を設定したい。
+- **US-6**: 学習者として、時間を効率的に管理できるように期限日を設定したい。
+
+---
+
+## 8. スコープ外機能 (将来フェーズ)
+
+以下の機能は Phase 1 には含まれず、将来のイテレーションで検討されます：
+
+- サブタスク / 階層型タスク
+- 時間トラッキング (見積時間 vs 実績時間)
+- 学習リソースリンク (URL, メモ)
+- 進捗率表示 (%)
+- スキルツリー連携
+
+---
+
+## 9. ドキュメント情報
+
+- **バージョン**: 1.2.0
+- **最終更新日**: 2026-08-02
+- **ステータス**: 公開中
+
+</div>
+
+<div v-if="currentLang === 'en'" class="lang-content en-content">
+
 # Requirements Specification: My Roadmap
 
 ## 1. Project Overview
@@ -20,13 +218,13 @@ The primary feature of this application is to manage learning tasks with the fol
 
 #### Task Properties
 
-| Property     | Type   | Required | Description                                                                  |
-| ------------ | ------ | -------- | ---------------------------------------------------------------------------- |
-| **Title**    | String | Yes      | Name of the learning task (e.g., "Learn Next.js App Router")                 |
-| **Status**   | Enum   | Yes      | Current state of the task: `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED`         |
-| **Priority** | Enum   | Yes      | Task priority level: `HIGH`, `MEDIUM`, `LOW`                                 |
-| **Due Date** | Date   | Yes      | Target completion date                                                       |
-| **Category** | String | Yes      | Learning domain (e.g., "Frontend", "Backend", "Infrastructure", "Algorithm") |
+| Property | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **Title** | String | Yes | Name of the learning task (e.g., "Learn Next.js App Router") |
+| **Status** | Enum | Yes | Current state: `NOT_STARTED`, `IN_PROGRESS`, `COMPLETED` |
+| **Priority** | Enum | Yes | Priority level: `HIGH`, `MEDIUM`, `LOW` |
+| **Due Date** | Date | Yes | Target completion date |
+| **Category** | String | Yes | Learning domain (e.g., "Frontend", "Backend", "Infrastructure") |
 
 #### Status Definitions
 
@@ -103,202 +301,26 @@ The primary feature of this application is to manage learning tasks with the fol
 - **NFR-3.3.1**: All data in transit shall be encrypted using TLS 1.2 or higher
 - **NFR-3.3.2**: DynamoDB data at rest shall be encrypted using AWS managed keys
 - **NFR-3.3.3**: Sensitive user data (email addresses) shall not be logged in plain text
-- **NFR-3.3.4**: User passwords shall never be stored in plain text (handled by Cognito)
-- **NFR-3.3.5**: JWT tokens shall not be stored in localStorage (use httpOnly cookies)
 
 #### 4.3.4 Input Validation & API Security
 
 - **NFR-3.4.1**: All user inputs shall be validated and sanitized on both client and server side
 - **NFR-3.4.2**: GraphQL queries shall have a maximum depth limit of 5 to prevent DoS attacks
 - **NFR-3.4.3**: API rate limiting shall be enforced at 100 requests per minute per user
-- **NFR-3.4.4**: CORS policy shall restrict allowed origins to the production domain only
-- **NFR-3.4.5**: GraphQL schema shall validate input types and reject malformed requests
-- **NFR-3.4.6**: File uploads shall not be allowed in Phase 1 (future consideration)
 
 #### 4.3.5 Security Monitoring & Logging
 
 - **NFR-3.5.1**: Failed authentication attempts shall be logged to CloudWatch
 - **NFR-3.5.2**: Suspicious activity (rate limit exceeded, invalid tokens) shall trigger CloudWatch alarms
 - **NFR-3.5.3**: Access logs shall be retained for 90 days
-- **NFR-3.5.4**: Security events (failed auth, authorization failures) shall be monitored and dashboarded
-- **NFR-3.5.5**: Application logs shall not contain sensitive data (passwords, tokens, PII)
-
-#### 4.3.6 Compliance & Best Practices
-
-- **NFR-3.6.1**: Application shall follow OWASP Top 10 mitigation strategies
-- **NFR-3.6.2**: Dependencies shall be scanned for known vulnerabilities using `npm audit`
-- **NFR-3.6.3**: AWS resources shall follow the principle of least privilege (IAM policies)
-- **NFR-3.6.4**: Security headers shall be configured:
-  - `Strict-Transport-Security` (HSTS)
-  - `X-Frame-Options: DENY`
-  - `X-Content-Type-Options: nosniff`
-  - `Content-Security-Policy` (CSP)
-- **NFR-3.6.5**: Regular security reviews shall be conducted before each release
-
-**Note**: Advanced security features (MFA, AWS WAF, AWS GuardDuty) are deferred to Phase 2+ for cost optimization.
-
-### 4.4 Scalability
-
-- **NFR-4.1**: System shall support up to 1,000 tasks per user
-- **NFR-4.2**: System shall handle concurrent users efficiently
 
 ---
 
-## 5. System Architecture
+## 5. Cloud Architecture Requirements (AWS Amplify Gen 2)
 
-### 5.1 Infrastructure Architecture
-
-The following diagram illustrates the AWS infrastructure and service integration:
-
-```mermaid
-graph TB
-    subgraph "Client Layer"
-        Browser[Web Browser]
-    end
-
-    subgraph "AWS Cloud"
-        subgraph "Frontend Hosting"
-            Amplify[AWS Amplify Hosting]
-            CloudFront[Amazon CloudFront CDN]
-        end
-
-        subgraph "Authentication"
-            Cognito[Amazon Cognito]
-        end
-
-        subgraph "API Layer"
-            AppSync[AWS AppSync<br/>GraphQL API]
-        end
-
-        subgraph "Data Layer"
-            DynamoDB[(Amazon DynamoDB)]
-        end
-
-        subgraph "CI/CD"
-            GitHub[GitHub Repository]
-            Actions[GitHub Actions]
-        end
-    end
-
-    Browser -->|HTTPS| CloudFront
-    CloudFront --> Amplify
-    Browser -->|Auth Request| Cognito
-    Browser -->|GraphQL Query/Mutation| AppSync
-    AppSync -->|Verify Token| Cognito
-    AppSync -->|Read/Write| DynamoDB
-
-    GitHub -->|Push| Actions
-    Actions -->|Deploy| Amplify
-
-    style Browser fill:#e1f5ff
-    style Amplify fill:#ff9900
-    style CloudFront fill:#ff9900
-    style Cognito fill:#ff9900
-    style AppSync fill:#ff9900
-    style DynamoDB fill:#ff9900
-    style GitHub fill:#24292e
-    style Actions fill:#2088ff
-```
-
-### 5.2 Application Architecture
-
-The following diagram shows the application layer structure:
-
-```mermaid
-graph TB
-    subgraph "Frontend - Next.js App Router"
-        Pages[Pages/Routes]
-        Components[React Components<br/>shadcn/ui]
-        GraphQLClient[Apollo Client /<br/>AWS Amplify Client]
-        AuthContext[Auth Context]
-    end
-
-    subgraph "Backend - AWS AppSync"
-        Schema[GraphQL Schema]
-        Resolvers[Resolvers]
-        AuthZ[Authorization Rules]
-    end
-
-    subgraph "Data Store"
-        TasksTable[Tasks Table<br/>DynamoDB]
-    end
-
-    Pages --> Components
-    Components --> GraphQLClient
-    Components --> AuthContext
-    GraphQLClient -->|GraphQL Operations| Schema
-    Schema --> Resolvers
-    Resolvers --> AuthZ
-    AuthZ -->|Validated Request| TasksTable
-
-    style Pages fill:#61dafb
-    style Components fill:#61dafb
-    style GraphQLClient fill:#61dafb
-    style AuthContext fill:#61dafb
-    style Schema fill:#e535ab
-    style Resolvers fill:#e535ab
-    style AuthZ fill:#e535ab
-    style TasksTable fill:#4053d6
-```
-
-### 5.3 Data Flow Diagram
-
-The following diagram illustrates a typical user interaction flow:
-
-```mermaid
-sequenceDiagram
-    actor User
-    participant Browser
-    participant Cognito
-    participant AppSync
-    participant DynamoDB
-
-    User->>Browser: Open Application
-    Browser->>Cognito: Request Authentication
-    Cognito-->>Browser: Return JWT Token
-
-    User->>Browser: Create Task
-    Browser->>AppSync: GraphQL Mutation<br/>(with JWT)
-    AppSync->>Cognito: Validate Token
-    Cognito-->>AppSync: Token Valid
-    AppSync->>AppSync: Check Authorization
-    AppSync->>DynamoDB: PutItem (Task)
-    DynamoDB-->>AppSync: Success
-    AppSync-->>Browser: Task Created
-    Browser-->>User: Display Success
-
-    User->>Browser: View Task List
-    Browser->>AppSync: GraphQL Query<br/>(with JWT)
-    AppSync->>Cognito: Validate Token
-    Cognito-->>AppSync: Token Valid
-    AppSync->>DynamoDB: Query (userId)
-    DynamoDB-->>AppSync: Return Tasks
-    AppSync-->>Browser: Task List
-    Browser-->>User: Display Tasks
-```
-
----
-
-## 6. Technical Stack
-
-### Frontend
-
-- **Framework**: Next.js (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: shadcn/ui
-
-### Backend
-
-- **Infrastructure**: AWS Amplify Gen 2 (TypeScript-based IaC)
-- **Authentication**: AWS Cognito
-- **Database**: Amazon DynamoDB
-- **API**: AWS AppSync (GraphQL)
-
-### CI/CD
-
-- **Version Control**: GitHub
-- **Pipeline**: GitHub Actions
+- **ARCH-1.1**: Infrastructure shall be defined and managed as TypeScript code (AWS Amplify Gen 2 IaC)
+- **ARCH-1.2**: Backend resources (Cognito, DynamoDB, AppSync) shall be verifiable locally in Amplify sandbox
+- **ARCH-1.3**: Automated deployment to AWS Amplify Hosting via GitHub Actions CI/CD pipeline
 
 ---
 
@@ -333,23 +355,12 @@ interface Task {
 
 ## 7. User Stories (Phase 1)
 
-### Epic: Task Management
-
-**US-1**: As a learner, I want to create a new learning task so that I can track what I need to study.
-
-**US-2**: As a learner, I want to view all my tasks in a list so that I can see my learning roadmap at a glance.
-
-**US-3**: As a learner, I want to update a task's status to "In Progress" when I start working on it, so that I can track my current focus.
-
-**US-4**: As a learner, I want to mark a task as "Completed" when I finish it, so that I can see my progress.
-
-**US-5**: As a learner, I want to set a priority for each task so that I can focus on the most important items first.
-
+**US-1**: As a learner, I want to create a new learning task so that I can track what I need to study.  
+**US-2**: As a learner, I want to view all my tasks in a list so that I can see my learning roadmap at a glance.  
+**US-3**: As a learner, I want to update a task's status to "In Progress" when I start working on it, so that I can track my current focus.  
+**US-4**: As a learner, I want to mark a task as "Completed" when I finish it, so that I can see my progress.  
+**US-5**: As a learner, I want to set a priority for each task so that I can focus on the most important items first.  
 **US-6**: As a learner, I want to set a due date for each task so that I can manage my time effectively.
-
-**US-7**: As a learner, I want to filter tasks by status so that I can focus on tasks that are in progress or not yet started.
-
-**US-8**: As a learner, I want to categorize tasks (Frontend, Backend, etc.) so that I can organize my learning by domain.
 
 ---
 
@@ -357,82 +368,19 @@ interface Task {
 
 The following features are **not included in Phase 1** but may be considered for future iterations:
 
-**Task Management Features:**
-
 - Subtasks / nested tasks
 - Time tracking (estimated hours, actual hours)
 - Learning resources (URLs, notes)
 - Progress percentage
-- Achievement tracking
-- Collaboration features
 - Skill tree integration
-- Difficulty levels
-- Tags and advanced search
-- Analytics and insights
-
-**Advanced Security Features (Phase 2+):**
-
-- Multi-Factor Authentication (MFA)
-- AWS WAF (Web Application Firewall)
-- AWS GuardDuty (threat detection)
-- Advanced DDoS protection
-- Penetration testing
-- Security incident response automation
 
 ---
 
-## 9. Success Criteria
+## 9. Document Information
 
-Phase 1 will be considered successful when:
-
-1. Users can perform full CRUD operations on learning tasks
-2. Users can filter and sort tasks by status, priority, category, and due date
-3. The application is deployed on AWS with authentication
-4. The UI is responsive and follows modern design standards
-5. All core functional requirements (FR-1.x, FR-2.x, FR-3.x) are implemented
-6. The codebase follows TypeScript best practices and maintains type safety
-
----
-
-## 10. Acceptance Criteria
-
-### Functional Criteria
-
-- [x] User can sign up and log in via AWS Cognito
-- [x] User can create a task with title, status, priority, due date, and category
-- [x] User can view a list of all their tasks
-- [x] User can edit any task property
-- [x] User can delete a task
-- [x] User can change task status (NOT_STARTED → IN_PROGRESS → COMPLETED)
-- [x] User can filter tasks by status, priority, and category
-- [x] User can sort tasks by due date and priority
-- [x] UI is responsive on desktop and mobile
-- [x] Application is deployed to AWS and accessible via HTTPS
-- [x] Code follows TypeScript best practices and includes type safety
-- [x] README includes setup instructions and project overview
-
-### Security Criteria
-
-- [ ] Password complexity requirements are enforced during registration
-- [ ] Email verification is required before first login
-- [ ] JWT tokens expire after 1 hour of inactivity
-- [ ] Users cannot access other users' tasks (verified via API testing)
-- [ ] API requests without valid JWT return 401 Unauthorized
-- [ ] All data is transmitted over HTTPS (TLS 1.2+)
-- [ ] DynamoDB encryption at rest is enabled
-- [ ] GraphQL query depth limiting is configured (max depth 5)
-- [ ] API rate limiting prevents abuse (100 requests/min per user)
-- [ ] CORS policy restricts to production domain only
-- [ ] Security headers are configured (HSTS, X-Frame-Options, CSP, X-Content-Type-Options)
-- [ ] npm audit shows no high or critical vulnerabilities
-- [ ] Failed authentication attempts are logged to CloudWatch
-- [ ] CloudWatch alarms are configured for suspicious activity
-
----
-
-## Document Information
-
-- **Version**: 1.1.0
-- **Last Updated**: 2026-03-16
+- **Version**: 1.2.0
+- **Last Updated**: 2026-08-02
 - **Author**: John ([github](https://github.com/vanilla2412))
 - **Status**: Published
+
+</div>

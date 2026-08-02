@@ -1,164 +1,137 @@
+<script setup>
+import { useLanguage } from './.vitepress/theme/composables/useLanguage'
+
+const { currentLang } = useLanguage()
+</script>
+
+<div v-if="currentLang === 'ja'" class="lang-content ja-content">
+
+# MVP 開発タスク分解一覧 (Issues Breakdown)
+
+本ドキュメントは、「My Roadmap」の MVP 開発における各ステップを 1〜2 時間（サイズ: S）の扱いやすいタスクに分解した GitHub Issues の定義一覧です。
+
+## Step 2: 認証機能 (Authentication)
+
+### Issue 1: Amplify Gen2 認証リソースの定義
+- **タイトル**: `feat: define Amplify Gen 2 Auth resource`
+- **概要**: Cognito を使用した Eメールサインアップのバックエンド認証ルールを構成。
+- **受入基準**:
+  - [ ] `web/amplify/auth/resource.ts` が Eメールログインロジックで更新されていること。
+  - [ ] `npx ampx sandbox` がエラーなくプロビジョニング完了すること。
+
+### Issue 2: ログインおよびサインアップ UI の実装
+- **タイトル**: `feat: implement login and signup UI`
+- **概要**: Amplify Authenticator を統合したログイン・アカウント作成画面の実装。
+- **受入基準**:
+  - [ ] ログイン用ルート (`/login` 等) を作成。
+  - [ ] Amplify Authenticator コンポーネントを組み込み。
+
+### Issue 3: 保護されたルート向け Next.js ミドルウェア
+- **タイトル**: `feat: implement protected routes via Next.js Middleware`
+- **概要**: 認証済みユーザーのみがタスクダッシュボードにアクセスできるように制御。
+- **受入基準**:
+  - [ ] `middleware.ts` を作成し、Amplify Auth セッション状態をチェック。
+  - [ ] 未認証ユーザーをログインページへリダイレクト。
+
+---
+
+## Step 3: バックエンドデータモデル
+
+### Issue 4: Task データモデルの定義 (DynamoDB & AppSync)
+- **タイトル**: `feat: define Task data model with owner authorization`
+- **概要**: `web/amplify/data/resource.ts` 内で所有者ベースのアクセス権限を持つ `Task` モデルを定義。
+
+---
+
+## Step 4: フロントエンド UI の実装
+
+### Issue 5: タスクダッシュボード UI
+- **タイトル**: `feat: implement Task Dashboard layout and list rendering`
+- **概要**: AppSync API からタスクを取得し、shadcn/ui コンポーネントで描画。
+
+### Issue 6: タスク作成フォーム (React Hook Form + Zod)
+- **タイトル**: `feat: implement Task creation form`
+- **概要**: Zod バリデーション付きのタスク作成モーダルフォーム。
+
+### Issue 7: タスク編集・削除機能
+- **タイトル**: `feat: implement Edit and Delete actions for Tasks`
+- **概要**: 既存タスクの更新および DynamoDB からの削除機能。
+
+---
+
+## Step 5 〜 Step 8: 運用・信頼性・将来計画
+
+- **Issue 8**: Amplify Hosting デプロイ設定
+- **Issue 9**: CI/CD パイプラインにおける Slack 通知機能
+- **Issue 10**: コミュニティ標準ドキュメント (`CONTRIBUTING.md`, `SECURITY.md`) の作成
+- **Issue 11**: 財務コスト試算および試算分析 ([financial_cost_estimation.md](/financial_cost_estimation))
+- **Issue 12**: Phase 3 AWS コスト設計および運用ポリシー ([operations_policy.md](/operations_policy))
+- **Issue 13**: Phase 4 AI 機能統合および MLOps 基盤の研究
+
+</div>
+
+<div v-if="currentLang === 'en'" class="lang-content en-content">
+
 # MVP Development Task Breakdown (Issues)
 
-These are the 1-2 hour estimation tasks (Size: S) broken down from `memo.md` for Step 2 and beyond. You can copy the content below to create new GitHub Issues using the template we just created.
+These are the 1-2 hour estimation tasks (Size: S) broken down from development roadmaps. You can use these titles and criteria to create GitHub Issues.
 
 ## Step 2: Authentication
 
 ### Issue 1: Amplify Gen2 Auth resource definition
-
 - **Title**: `feat: define Amplify Gen 2 Auth resource`
-- **Context**: We need to configure the backend authentication rules using email sign-up for Cognito.
+- **Context**: Configure backend authentication rules using email sign-up for Cognito.
 - **Acceptance Criteria**:
   - [ ] `web/amplify/auth/resource.ts` is updated with email sign-in logic.
-  - [ ] Running `npx ampx sandbox` launches successfully and provisions the Auth resource without errors.
-- **Estimated Size**: `S (1-2h)`
+  - [ ] Running `npx ampx sandbox` launches successfully without errors.
 
 ### Issue 2: Login and Signup UI Implementation
-
 - **Title**: `feat: implement login and signup UI`
-- **Context**: The frontend needs a way to present login options to the user, integrating the Amplify Authenticator.
+- **Context**: Present login and signup options using Amplify Authenticator.
 - **Acceptance Criteria**:
-  - [ ] Create a dedicated login route (`/login` or similar).
-  - [ ] Embed the Amplify Authenticator component.
-  - [ ] UI is rendered correctly and accepts user input.
-- **Estimated Size**: `S (1-2h)`
+  - [ ] Create dedicated login route (`/login`).
+  - [ ] Embed Amplify Authenticator component.
 
 ### Issue 3: Next.js Middleware for Protected Routes
-
 - **Title**: `feat: implement protected routes via Next.js Middleware`
-- **Context**: Only authenticated users should be able to access the Task Dashboard.
+- **Context**: Only authenticated users should access the Task Dashboard.
 - **Acceptance Criteria**:
-  - [ ] Create or update `middleware.ts` to check Amplify Auth session state.
-  - [ ] Unauthenticated users are redirected to the login page.
-  - [ ] Authenticated users can successfully access the protected dashboard route.
-- **Estimated Size**: `S (1-2h)`
+  - [ ] Create or update `middleware.ts` to check Amplify Auth session.
+  - [ ] Unauthenticated users are redirected to login page.
 
 ---
 
 ## Step 3: Backend Data Model
 
 ### Issue 4: Task Data Model definition (DynamoDB & AppSync)
-
 - **Title**: `feat: define Task data model with owner authorization`
-- **Context**: Users need a DynamoDB table to store their tasks. We need to define the schema and ensure owner-based access control.
-- **Acceptance Criteria**:
-  - [ ] `web/amplify/data/resource.ts` defines the `Task` model (title, status, priority, dueDate, category).
-  - [ ] Authorization rules (`allow.owner()`) are applied to the model.
-  - [ ] `amplify sandbox` applies the DB schema correctly.
-- **Estimated Size**: `S (1-2h)`
+- **Context**: Define the `Task` schema in `web/amplify/data/resource.ts` with `allow.owner()` rules.
 
 ---
 
 ## Step 4: Frontend UI Implementation
 
 ### Issue 5: Task Dashboard UI
-
 - **Title**: `feat: implement Task Dashboard layout and list rendering`
-- **Context**: Displaying the user's tasks using shadcn/ui components.
-- **Acceptance Criteria**:
-  - [ ] Fetch tasks from the AppSync API.
-  - [ ] Render the tasks in a list/table format using shadcn/ui.
-  - [ ] Loading states are handled gracefully.
-- **Estimated Size**: `S (1-2h)`
+- **Context**: Display user tasks using AppSync API and shadcn/ui components.
 
 ### Issue 6: Task Creation Form (React Hook Form + Zod)
-
 - **Title**: `feat: implement Task creation form`
-- **Context**: Users need a validated form to create new tasks.
-- **Acceptance Criteria**:
-  - [ ] Create a form mapped to a Zod schema matching the Task data model.
-  - [ ] Integrate React Hook Form for state management.
-  - [ ] Upon submission, a new task is created via the GraphQL API and the dashboard updates.
-- **Estimated Size**: `S (1-2h)`
+- **Context**: Validated form to create new tasks mapped to Zod schema.
 
 ### Issue 7: Task Edit and Delete Functionality
-
 - **Title**: `feat: implement Edit and Delete actions for Tasks`
-- **Context**: Users must be able to update task status or delete tasks entirely.
-- **Acceptance Criteria**:
-  - [ ] Add an "Edit" and "Delete" button per task.
-  - [ ] Edit functionality updates existing records in DynamoDB.
-  - [ ] Delete functionality removes the task and refreshes the UI.
-- **Estimated Size**: `S (1-2h)`
+- **Context**: Update status or delete tasks directly in DynamoDB.
 
 ---
 
-## Step 5: Deployment
+## Step 5 - Step 8: Operations & Roadmap
 
-### Issue 8: AWS Amplify Hosting Deployment Configuration
+- **Issue 8**: AWS Amplify Hosting Deployment Configuration
+- **Issue 9**: Implement Slack Notifications for CI/CD Pipeline
+- **Issue 10**: GitHub Release Notes and Community Standards
+- **Issue 11**: Financial Cost Estimation and Analysis ([financial_cost_estimation.md](/financial_cost_estimation))
+- **Issue 12**: Phase 3 AWS Cost Design and Operations Policy ([operations_policy.md](/operations_policy))
+- **Issue 13**: Phase 4 AI Integration and MLOps Foundation
 
-- **Title**: `chore: configure Amplify Hosting deployment logic`
-- **Context**: The MVP must be accessible to the public on AWS via Amplify Hosting.
-- **Acceptance Criteria**:
-  - [ ] The app is successfully built in the Amplify CI/CD console or via AWS CDK setup.
-  - [ ] The live URL is active and functional.
-- **Estimated Size**: `S (1-2h)`
-
----
-
-## Step 6: Observability & Notifications
-
-### Issue 9: Implement Slack Notifications for CI/CD Pipeline
-
-- **Title**: `feat: implement Slack notifications for CI/CD status`
-- **GitHub Issue**: [Closes #63](https://github.com/Vanilla2412/MyRoadmap/issues/63)
-- **Context**: Real-time feedback on build and deployment status is crucial for development efficiency.
-- **Acceptance Criteria**:
-  - [x] Create a Slack Inbox Webhook.
-  - [x] Store the Webhook URL in GitHub Secrets as `SLACK_WEBHOOK_URL`.
-  - [x] Update `ci.yml` and `deploy.yml` to include notification steps.
-  - [x] Verify that notifications are received in Slack for both success and failure states.
-- **Estimated Size**: `S (1-2h)`
-
----
-
-## Step 7: Project Standards & Sustainability
-
-### Issue 10: GitHub Release Notes and Community Standards
-
-- **Title**: `chore: implement GitHub Release Notes and Community Standards`
-- **GitHub Issue**: [issue #64](https://github.com/Vanilla2412/MyRoadmap/issues/64)
-- **Context**: Transitioning the repository from a personal script to an open-source grade project requires standardized community files and automated versioning.
-- **Acceptance Criteria**:
-  - [ ] Create `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md`.
-  - [ ] Configure GitHub Actions to automate release note generation (e.g., via `release-drafter`).
-  - [ ] Document the project's versioning strategy (SemVer).
-- **Estimated Size**: `S (1-2h)`
-
-### Issue 11: Financial Cost Estimation and Analysis
-
-- **Title**: `docs: conduct project financial cost estimation and analysis`
-- **GitHub Issue**: [issue #65](https://github.com/Vanilla2412/MyRoadmap/issues/65)
-- **Context**: Demonstrating cost-awareness is a key engineering skill. We need to estimate the operating costs on AWS.
-- **Acceptance Criteria**:
-  - [ ] Research and estimate monthly costs for Amplify, Cognito, DynamoDB, and AppSync.
-  - [ ] Identify cost transition points when scaling beyond the AWS Free Tier.
-  - [ ] Create a cost analysis report in Markdown.
-- **Estimated Size**: `S (1-2h)`
-
----
-
-## Step 8: Future Planning (Phase 3 & 4)
-
-### Issue 12: Phase 3 - AWS Cost Design and Operations Policy
-
-- **Title**: `feat: define Phase 3 AWS cost design and operations policy`
-- **GitHub Issue**: [issue #66](https://github.com/Vanilla2412/MyRoadmap/issues/66)
-- **Context**: Operational excellence involves designing for cost-efficiency and reliable maintenance.
-- **Acceptance Criteria**:
-  - [x] Define budget alerts and cost monitoring strategies. (Implemented in PR #71)
-  - [x] Design resource management policies (log retention, cleanup schedules).
-  - [x] Establish a disaster recovery and automated backup policy.
-- **Estimated Size**: `S (1-2h)`
-
-### Issue 13: Phase 4 - AI Integration and MLOps Foundation
-
-- **Title**: `feat: research Phase 4 AI integration and MLOps foundation`
-- **GitHub Issue**: [issue #67](https://github.com/Vanilla2412/MyRoadmap/issues/67)
-- **Context**: Preparing for AI features and building the foundation for MLOps skills.
-- **Acceptance Criteria**:
-  - [ ] Define requirements for AI features (e.g., auto-categorization, priority recommendation).
-  - [ ] Evaluate AWS-native AI services (SageMaker, Bedrock, etc.) for integration.
-  - [ ] Outline a roadmap for transitioning to an AI-native application architecture.
-  - [ ] Draft an initial MLOps pipeline concept (CI/CD for ML).
-- **Estimated Size**: `L (4-8h / Research Task)`
+</div>
